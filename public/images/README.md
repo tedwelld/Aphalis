@@ -1,23 +1,27 @@
 # Image assets
 
-Drop Africa Jungle Safaris photography here. Until a file exists, the site shows a
-tasteful gold/cream gradient placeholder (see `src/components/Photo.tsx`), so
-the layout never breaks.
-
-Expected paths (referenced from content + components):
+## Logo
 
 - `logo.png` — **brand logo** (the "Africa Jungle Safaris / Explore the Wild"
   badge). Used in the header and footer via `src/components/Logo.tsx`. Until this
-  file is added, a text wordmark is shown instead. Save the shared logo here.
-- `hero.jpg` — homepage hero background
-- `page-header.jpg` — default inner-page banner
-- `about.jpg` — about page story image
-- `destinations/zimbabwe.jpg`, `botswana.jpg`, `namibia.jpg`, `zambia.jpg`
-- `tours/<tour-slug>.jpg` — one per tour (see `src/content/tours.ts`)
-- `guides/guide-1.jpg`, `guide-2.jpg`, `guide-3.jpg`
-- `gallery/*.jpg` — see `src/content/site.ts`
-- `blog/<post-slug>.jpg` — see `src/content/blog.ts`
+  file is added, a text wordmark is shown instead. **Save the shared logo here.**
 
-Recommended: landscape JP/WebP, ~1600px wide for headers, ~800px for cards.
-Replace placeholder names with real, rights-cleared Africa Jungle Safaris imagery
-before launch.
+## Demo photography (`demo/`)
+
+All catalog images (destinations, tours, activities, guides, gallery, blog, hero)
+are **self-hosted** in `demo/` and served from our own domain — reliable and fast
+on Vercel. They are curated Unsplash photos (Unsplash license) used as
+placeholders.
+
+How it works: each content item calls `demoPhoto(tags, lock)` and the `lock`
+number is mapped to a file in `demo/` by `src/lib/img.ts`. To change an image,
+either drop a replacement at the same `demo/<name>.jpg` path, or edit the
+`lockImage` map in `src/lib/img.ts`.
+
+> Note: these files must be **committed to git** so Vercel serves them.
+
+Before launch, replace the `demo/` images with rights-cleared Africa Jungle
+Safaris photography (keep the same filenames, or update `src/lib/img.ts`).
+Recommended: landscape JPG/WebP, ~1600px wide for headers, ~800px for cards.
+The gradient placeholder in `src/components/Photo.tsx` still covers any missing
+or slow image so the layout never breaks.
