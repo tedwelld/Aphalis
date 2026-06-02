@@ -5,6 +5,8 @@
  * IDs with real Bokun experience IDs once the channel is set up.
  */
 
+import { demoPhoto } from "@/lib/img";
+
 export type Tour = {
   slug: string;
   name: string;
@@ -32,7 +34,7 @@ export const tours: Tour[] = [
       "Our signature short safari: tour the mighty Victoria Falls with a knowledgeable guide, cruise the Zambezi as the sun sets, and head into Hwange National Park in search of elephant, lion and wild dog. The perfect introduction to the region.",
     highlights: ["Guided Falls tour", "Sunset Zambezi cruise", "Hwange game drive", "All transfers"],
     priceFrom: "$ on request",
-    image: "/images/tours/victoria-falls-classic.jpg",
+    image: demoPhoto("victoria-falls,waterfall", 201, 1200, 800),
   },
   {
     slug: "okavango-delta-explorer",
@@ -45,7 +47,7 @@ export const tours: Tour[] = [
       "Venture deep into the Okavango Delta for an immersive water-and-land safari. Glide between islands by mokoro, walk with your guide, and enjoy classic game drives in one of Africa's most pristine ecosystems.",
     highlights: ["Mokoro excursions", "Walking safari", "Delta game drives", "Bush camp"],
     priceFrom: "$ on request",
-    image: "/images/tours/okavango-delta-explorer.jpg",
+    image: demoPhoto("okavango,delta,canoe", 202, 1200, 800),
   },
   {
     slug: "chobe-river-safari",
@@ -58,7 +60,7 @@ export const tours: Tour[] = [
       "Chobe National Park hosts one of Africa's largest elephant populations. Cruise the river at golden hour and take morning game drives along the floodplains teeming with wildlife.",
     highlights: ["Chobe river cruise", "Floodplain game drive", "Birdlife", "Sundowners"],
     priceFrom: "$ on request",
-    image: "/images/tours/chobe-river-safari.jpg",
+    image: demoPhoto("elephant,river,africa", 203, 1200, 800),
   },
   {
     slug: "sossusvlei-dunes-adventure",
@@ -71,7 +73,7 @@ export const tours: Tour[] = [
       "Witness sunrise over the towering red dunes of Sossusvlei, walk the surreal white pan of Deadvlei, and search for desert-adapted wildlife. A photographer's dream across Namibia's iconic desert landscapes.",
     highlights: ["Dune climbing", "Deadvlei walk", "Desert wildlife", "Stargazing"],
     priceFrom: "$ on request",
-    image: "/images/tours/sossusvlei-dunes-adventure.jpg",
+    image: demoPhoto("sossusvlei,dune,desert", 204, 1200, 800),
   },
   {
     slug: "south-luangwa-walking-safari",
@@ -84,7 +86,7 @@ export const tours: Tour[] = [
       "South Luangwa is where the walking safari was born. Track game on foot with Zambia's renowned guides, enjoy classic drives, and immerse yourself in one of the continent's wildest valleys.",
     highlights: ["Guided walking safaris", "Game drives", "Expert local guides", "Riverside camp"],
     priceFrom: "$ on request",
-    image: "/images/tours/south-luangwa-walking-safari.jpg",
+    image: demoPhoto("safari,walking,leopard", 205, 1200, 800),
   },
   {
     slug: "family-falls-adventure",
@@ -97,7 +99,7 @@ export const tours: Tour[] = [
       "Designed for families, this gentle itinerary combines a guided Falls tour, an easy river cruise and a half-day game drive — with plenty of flexibility and comfortable accommodation.",
     highlights: ["Family-paced itinerary", "Falls tour", "Easy river cruise", "Half-day game drive"],
     priceFrom: "$ on request",
-    image: "/images/tours/family-falls-adventure.jpg",
+    image: demoPhoto("giraffe,safari,family", 206, 1200, 800),
   },
 ];
 

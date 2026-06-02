@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { bookingSchema, type BookingInput } from "@/lib/bookingSchema";
 import { Button } from "@/components/ui/Button";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -58,7 +58,7 @@ export function BookingForm({ tourName }: { tourName?: string }) {
   if (status === "success") {
     return (
       <div className="rounded-2xl border border-line bg-white p-8 text-center">
-        <CheckCircle2 className="mx-auto h-10 w-10 text-gold-dark" />
+        <Pi name="pi-check-circle" className="mx-auto block w-fit text-4xl text-gold-dark" />
         <h3 className="mt-4 text-xl">Enquiry sent!</h3>
         <p className="mt-2 text-ink-soft">
           Thank you — we&apos;ve emailed you a confirmation and our team will be in touch shortly.
@@ -131,13 +131,13 @@ export function BookingForm({ tourName }: { tourName?: string }) {
 
       {status === "error" && serverError && (
         <p className="mt-4 flex items-center gap-2 text-sm text-red-600">
-          <AlertCircle className="h-4 w-4" /> {serverError}
+          <Pi name="pi-exclamation-circle" className="text-base" /> {serverError}
         </p>
       )}
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <Button type="submit" disabled={status === "submitting"}>
-          <Send className="h-4 w-4" />
+          <Pi name="pi-send" className="text-base" />
           {status === "submitting" ? "Sending…" : "Send enquiry"}
         </Button>
         <WhatsAppButton

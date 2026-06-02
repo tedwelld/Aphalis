@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Check, Clock, MapPin } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { PageHeader } from "@/components/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { Badge } from "@/components/ui/Card";
@@ -51,11 +51,11 @@ export default async function TourPage({
             <div className="flex flex-wrap items-center gap-3">
               <Badge>{tour.category}</Badge>
               <span className="inline-flex items-center gap-1 text-sm text-ink-soft">
-                <Clock className="h-4 w-4 text-gold-dark" /> {tour.durationDays} days
+                <Pi name="pi-clock" className="text-base text-gold-dark" /> {tour.durationDays} days
               </span>
               {destination && (
                 <span className="inline-flex items-center gap-1 text-sm text-ink-soft">
-                  <MapPin className="h-4 w-4 text-gold-dark" /> {destination.name}
+                  <Pi name="pi-map-marker" className="text-base text-gold-dark" /> {destination.name}
                 </span>
               )}
             </div>
@@ -68,7 +68,7 @@ export default async function TourPage({
             <ul className="mt-4 grid gap-2 sm:grid-cols-2">
               {tour.highlights.map((h) => (
                 <li key={h} className="flex items-center gap-2 text-sm text-foreground">
-                  <Check className="h-4 w-4 text-gold-dark" /> {h}
+                  <Pi name="pi-check" className="text-sm text-gold-dark" /> {h}
                 </li>
               ))}
             </ul>

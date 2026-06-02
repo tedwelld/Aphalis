@@ -8,18 +8,18 @@
  */
 
 export const siteConfig = {
-  name: "ATSZ Safaris",
-  tagline: "Ethical African safaris, crafted by expert local guides.",
+  name: "Africa Jungle Safaris",
+  tagline: "Explore the wild — ethical African safaris, crafted by expert local guides.",
   description:
-    "ATSZ Safaris offers unforgettable, ethical safari experiences across Zimbabwe, Botswana, Namibia and Zambia — game drives, boat cruises, walking safaris and more. Book online, on WhatsApp, or by email.",
-  url: "https://atszsafaris.com",
+    "Africa Jungle Safaris offers unforgettable, ethical safari experiences across Zimbabwe, Botswana, Namibia and Zambia — game drives, boat cruises, walking safaris and more. Book online, on WhatsApp, or by email.",
+  url: "https://africajunglesafaris.com",
   locale: "en",
 
-  // Contact (PLACEHOLDERS — replace with ATSZ's real details)
-  email: "bookings@atszsafaris.com",
-  phoneDisplay: "+263 77 000 0000",
+  // Contact (PLACEHOLDERS — replace with the company's real details)
+  email: "bookings@africajunglesafaris.com",
+  phoneDisplay: "+263 78 927 6807",
   whatsappNumber:
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "263770000000", // E.164, digits only
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "263789276807", // E.164, digits only (+263 78 927 6807)
   address: "Victoria Falls, Zimbabwe",
 
   // Bokun

@@ -8,7 +8,7 @@ import { destinations } from "@/content/destinations";
 export const metadata: Metadata = {
   title: "Destinations",
   description:
-    "Explore safari destinations across Zimbabwe, Botswana, Namibia and Zambia with ATSZ Safaris.",
+    "Explore safari destinations across Zimbabwe, Botswana, Namibia and Zambia with Africa Jungle Safaris.",
 };
 
 export default function DestinationsPage() {

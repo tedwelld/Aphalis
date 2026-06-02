@@ -1,11 +1,12 @@
 import { Container } from "@/components/ui/Container";
 import { Photo } from "@/components/Photo";
+import { demoPhoto } from "@/lib/img";
 
 /** Compact hero banner for inner pages. */
 export function PageHeader({
   title,
   subtitle,
-  image = "/images/page-header.jpg",
+  image = demoPhoto("savannah,africa,landscape", 2, 1920, 800),
 }: {
   title: string;
   subtitle?: string;

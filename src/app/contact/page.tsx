@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { PageHeader } from "@/components/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { BookingForm } from "@/components/BookingForm";
@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/siteConfig";
 export const metadata: Metadata = {
   title: "Contact & Booking",
   description:
-    "Plan your safari with ATSZ Safaris. Send an enquiry, chat on WhatsApp, or email us — we reply fast.",
+    "Plan your safari with Africa Jungle Safaris. Send an enquiry, chat on WhatsApp, or email us — we reply fast.",
 };
 
 export default function ContactPage() {
@@ -32,7 +32,7 @@ export default function ContactPage() {
             <ul className="mt-8 space-y-5">
               <li className="flex items-start gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                  <MapPin className="h-5 w-5 text-gold-dark" />
+                  <Pi name="pi-map-marker" className="text-xl text-gold-dark" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Visit us</p>
@@ -41,7 +41,7 @@ export default function ContactPage() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                  <Phone className="h-5 w-5 text-gold-dark" />
+                  <Pi name="pi-phone" className="text-xl text-gold-dark" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Call</p>
@@ -52,7 +52,7 @@ export default function ContactPage() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                  <Mail className="h-5 w-5 text-gold-dark" />
+                  <Pi name="pi-envelope" className="text-xl text-gold-dark" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Email</p>

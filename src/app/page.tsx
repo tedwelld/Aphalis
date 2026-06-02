@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { Hero } from "@/components/Hero";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
@@ -49,7 +49,7 @@ export default function HomePage() {
         </div>
         <div className="mt-10 text-center">
           <ButtonLink href="/activities" variant="secondary">
-            See all activities <ArrowRight className="h-4 w-4" />
+            See all activities <Pi name="pi-arrow-right" className="text-base" />
           </ButtonLink>
         </div>
       </Section>
@@ -68,14 +68,14 @@ export default function HomePage() {
         </div>
         <div className="mt-10 text-center">
           <ButtonLink href="/tours">
-            Browse all tours <ArrowRight className="h-4 w-4" />
+            Browse all tours <Pi name="pi-arrow-right" className="text-base" />
           </ButtonLink>
         </div>
       </Section>
 
-      {/* Why ATSZ */}
+      {/* Why Africa Jungle Safaris */}
       <Section muted>
-        <SectionHeading eyebrow="Why ATSZ Safaris" title="Travel that gives back" />
+        <SectionHeading eyebrow="Why Africa Jungle Safaris" title="Travel that gives back" />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p) => (
             <div key={p.title} className="rounded-2xl border border-line bg-white p-6">
@@ -128,7 +128,7 @@ export default function HomePage() {
         </div>
         <div className="mt-10 text-center">
           <Link href="/blog" className="inline-flex items-center gap-1 text-sm font-medium text-gold-dark">
-            Read the journal <ArrowRight className="h-4 w-4" />
+            Read the journal <Pi name="pi-arrow-right" className="text-base" />
           </Link>
         </div>
       </Section>

@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { ButtonLink } from "@/components/ui/Button";
 import { buildWhatsappUrl, type BookingDetails } from "@/lib/templates";
 import { cn } from "@/lib/cn";
@@ -25,7 +25,7 @@ export function WhatsAppButton({
       variant={variant}
       className={className}
     >
-      <MessageCircle className="h-4 w-4" />
+      <Pi name="pi-whatsapp" className="text-base" />
       {label}
     </ButtonLink>
   );
@@ -44,7 +44,7 @@ export function WhatsAppFab() {
         "bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105",
       )}
     >
-      <MessageCircle className="h-7 w-7" />
+      <Pi name="pi-whatsapp" className="text-3xl" />
     </a>
   );
 }

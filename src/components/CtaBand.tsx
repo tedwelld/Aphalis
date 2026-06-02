@@ -1,4 +1,4 @@
-import { Mail } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -21,7 +21,7 @@ export function CtaBand({
           <ButtonLink href="/tours">Browse &amp; book online</ButtonLink>
           <WhatsAppButton variant="whatsapp" />
           <ButtonLink href="/contact" variant="secondary">
-            <Mail className="h-4 w-4" /> Email enquiry
+            <Pi name="pi-envelope" className="text-base" /> Email enquiry
           </ButtonLink>
         </div>
       </Container>

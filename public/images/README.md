@@ -1,11 +1,14 @@
 # Image assets
 
-Drop ATSZ Safaris photography here. Until a file exists, the site shows a
+Drop Africa Jungle Safaris photography here. Until a file exists, the site shows a
 tasteful gold/cream gradient placeholder (see `src/components/Photo.tsx`), so
 the layout never breaks.
 
 Expected paths (referenced from content + components):
 
+- `logo.png` — **brand logo** (the "Africa Jungle Safaris / Explore the Wild"
+  badge). Used in the header and footer via `src/components/Logo.tsx`. Until this
+  file is added, a text wordmark is shown instead. Save the shared logo here.
 - `hero.jpg` — homepage hero background
 - `page-header.jpg` — default inner-page banner
 - `about.jpg` — about page story image
@@ -16,4 +19,5 @@ Expected paths (referenced from content + components):
 - `blog/<post-slug>.jpg` — see `src/content/blog.ts`
 
 Recommended: landscape JP/WebP, ~1600px wide for headers, ~800px for cards.
-Replace placeholder names with real, rights-cleared ATSZ imagery before launch.
+Replace placeholder names with real, rights-cleared Africa Jungle Safaris imagery
+before launch.

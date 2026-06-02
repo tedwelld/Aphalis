@@ -2,12 +2,13 @@ import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Photo } from "@/components/Photo";
+import { demoPhoto } from "@/lib/img";
 
 export function Hero() {
   return (
     <section className="relative isolate">
       <Photo
-        src="/images/hero.jpg"
+        src={demoPhoto("safari,elephant,sunset,savannah", 1, 1920, 1080)}
         alt="African elephants at sunset on the savannah"
         className="absolute inset-0 -z-10 h-full w-full"
       />

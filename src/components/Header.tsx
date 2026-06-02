@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Pi } from "@/components/Pi";
+import { Logo } from "@/components/Logo";
 import { siteConfig } from "@/lib/siteConfig";
 import { Container } from "@/components/ui/Container";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -20,9 +21,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
       <Container className="flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="font-serif text-xl font-semibold tracking-tight text-foreground">
-            ATSZ <span className="text-gold-dark">Safaris</span>
-          </span>
+          <Logo className="h-11" />
         </Link>
 
         {/* Desktop nav */}
@@ -52,7 +51,7 @@ export function Header() {
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {open ? <Pi name="pi-times" className="text-2xl" /> : <Pi name="pi-bars" className="text-2xl" />}
         </button>
       </Container>
 

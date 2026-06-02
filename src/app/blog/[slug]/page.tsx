@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { PageHeader } from "@/components/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { CtaBand } from "@/components/CtaBand";
@@ -37,7 +37,7 @@ export default async function BlogPostPage({
       <Section>
         <article className="mx-auto max-w-2xl">
           <Link href="/blog" className="inline-flex items-center gap-1 text-sm font-medium text-gold-dark">
-            <ArrowLeft className="h-4 w-4" /> Back to journal
+            <Pi name="pi-arrow-left" className="text-sm" /> Back to journal
           </Link>
           <p className="mt-6 text-sm uppercase tracking-wider text-gold-dark">
             {new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}

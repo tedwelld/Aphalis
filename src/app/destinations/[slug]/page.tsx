@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Check } from "lucide-react";
+import { Pi } from "@/components/Pi";
 import { PageHeader } from "@/components/PageHeader";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { BokunWidget } from "@/components/BokunWidget";
@@ -50,7 +50,7 @@ export default async function DestinationPage({
             <ul className="mt-6 grid gap-2 sm:grid-cols-2">
               {destination.highlights.map((h) => (
                 <li key={h} className="flex items-center gap-2 text-sm text-foreground">
-                  <Check className="h-4 w-4 text-gold-dark" /> {h}
+                  <Pi name="pi-check" className="text-sm text-gold-dark" /> {h}
                 </li>
               ))}
             </ul>

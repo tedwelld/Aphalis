@@ -1,5 +1,7 @@
 /** Simple in-repo blog content. Swap to a CMS later if needed. */
 
+import { demoPhoto } from "@/lib/img";
+
 export type BlogPost = {
   slug: string;
   title: string;
@@ -18,8 +20,8 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "When the rains retreat, the elephants gather. Here's how to time your Hwange safari for the very best game viewing.",
     date: "2026-05-12",
-    author: "ATSZ Safaris",
-    image: "/images/blog/hwange.jpg",
+    author: "Africa Jungle Safaris",
+    image: demoPhoto("hwange,elephant,africa", 601, 1200, 700),
     body: `Hwange is Zimbabwe's largest national park and home to one of Africa's biggest elephant populations.
 
 The dry season — roughly July to October — is prime time. As natural water dries up, wildlife concentrates around pumped waterholes, making sightings reliable and spectacular.
@@ -34,8 +36,8 @@ Whenever you visit, our guides know exactly where to be at the right time of day
     excerpt:
       "The Falls are just the beginning. Discover the adventures, cruises and culture that make this one of Africa's great destinations.",
     date: "2026-04-28",
-    author: "ATSZ Safaris",
-    image: "/images/blog/victoria-falls.jpg",
+    author: "Africa Jungle Safaris",
+    image: demoPhoto("victoria-falls,zambezi", 602, 1200, 700),
     body: `Most travellers come for the thundering curtain of water — and it never disappoints.
 
 But Victoria Falls is also a hub of adventure: white-water rafting, helicopter flights, bungee jumping and sunset cruises on the Zambezi.
@@ -50,8 +52,8 @@ Talk to us about combining the icons into one seamless trip.`,
     excerpt:
       "There's no substitute for experiencing the bush on foot. Here's what makes a walking safari unforgettable.",
     date: "2026-04-02",
-    author: "ATSZ Safaris",
-    image: "/images/blog/walking-safari.jpg",
+    author: "Africa Jungle Safaris",
+    image: demoPhoto("walking,safari,bush", 603, 1200, 700),
     body: `On foot, the bush reveals itself differently. You notice tracks, scents and the small details a vehicle rushes past.
 
 Zambia's South Luangwa is the spiritual home of the walking safari, with guides trained to read the wilderness and keep you safe.

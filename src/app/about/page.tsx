@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Photo } from "@/components/Photo";
+import { demoPhoto } from "@/lib/img";
 import { Icon } from "@/components/Icon";
 import { TestimonialCard } from "@/components/cards";
 import { CtaBand } from "@/components/CtaBand";
@@ -10,25 +11,25 @@ import { guides, pillars, testimonials } from "@/content/site";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "ATSZ Safaris crafts ethical, expertly-guided safaris across Southern Africa. Meet our guides and discover what drives us.",
+    "Africa Jungle Safaris crafts ethical, expertly-guided safaris across Southern Africa. Meet our guides and discover what drives us.",
 };
 
 export default function AboutPage() {
   return (
     <>
       <PageHeader
-        title="About ATSZ Safaris"
+        title="About Africa Jungle Safaris"
         subtitle="Ethical, expertly-guided safaris crafted by people who call this wilderness home."
       />
 
       <Section>
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          <Photo src="/images/about.jpg" alt="Safari guide scanning the horizon" className="aspect-[4/3] rounded-2xl" />
+          <Photo src={demoPhoto("safari,guide,binoculars", 3, 1000, 800)} alt="Safari guide scanning the horizon" className="aspect-[4/3] rounded-2xl" />
           <div>
             <span className="gold-rule mb-5 block" />
             <h2 className="text-3xl text-foreground">Our story</h2>
             <p className="mt-4 text-ink-soft leading-relaxed">
-              ATSZ Safaris was founded on a simple belief: that travel should give
+              Africa Jungle Safaris was founded on a simple belief: that travel should give
               back to the land and people who make it unforgettable. We design
               low-impact safaris that put expert local guides, authentic encounters
               and conservation at the centre of every journey.

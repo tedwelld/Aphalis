@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
+import "primeicons/primeicons.css";
 import "./globals.css";
 import { siteConfig } from "@/lib/siteConfig";
 import { Header } from "@/components/Header";

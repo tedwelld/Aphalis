@@ -9,7 +9,7 @@ import { tours } from "@/content/tours";
 export const metadata: Metadata = {
   title: "Safari Tours",
   description:
-    "Browse and book ATSZ Safari tours across Zimbabwe, Botswana, Namibia and Zambia — online, on WhatsApp, or by email.",
+    "Browse and book Africa Jungle Safaris tours across Zimbabwe, Botswana, Namibia and Zambia — online, on WhatsApp, or by email.",
 };
 
 export default function ToursPage() {

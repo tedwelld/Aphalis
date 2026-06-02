@@ -1,18 +1,28 @@
-# ATSZ Safaris
+# Africa Jungle Safaris
 
-Marketing + booking website for **ATSZ Safaris**, built with Next.js (App Router),
-TypeScript and Tailwind CSS v4. Light **white + gold** theme. Guests can book three
-ways: **Bókun** online checkout, **WhatsApp**, or an **email** enquiry form — each
-with its own message template.
+Marketing + booking website for **Africa Jungle Safaris**, built with Next.js
+(App Router), TypeScript and Tailwind CSS v4. Light **white + gold** theme. Guests
+can book three ways: **Bókun** online checkout, **WhatsApp**, or an **email**
+enquiry form — each with its own message template.
 
 ## Tech stack
 
 - Next.js 16 (App Router) + React 19 + TypeScript
 - Tailwind CSS v4 (theme tokens in `src/app/globals.css`)
+- PrimeIcons (PrimeNG's icon set) for all UI icons — via `src/components/Pi.tsx`
 - Bókun booking widgets (loader + embeds)
 - Resend for transactional email (lead + guest auto-reply)
 - react-hook-form + zod for the booking form
 - Deployed on Vercel
+
+## Branding
+
+- Logo: `public/images/logo.png` (the "Africa Jungle Safaris / Explore the Wild"
+  badge), rendered via `src/components/Logo.tsx` with a text-wordmark fallback if
+  the file is missing.
+- Icons: PrimeIcons font (`primeicons`), imported once in `src/app/layout.tsx`.
+  Use `<Pi name="pi-..." />` everywhere; the activity/pillar icon names in
+  `src/content/*` map to PrimeIcons in `src/components/Icon.tsx`.
 
 ## Getting started
 
