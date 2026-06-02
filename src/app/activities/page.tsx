@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { Icon } from "@/components/Icon";
-import { Card } from "@/components/ui/Card";
 import { Photo } from "@/components/Photo";
 import { CtaBand } from "@/components/CtaBand";
 import { activities } from "@/content/activities";
@@ -23,18 +22,25 @@ export default function ActivitiesPage() {
       <Section>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {activities.map((a) => (
-            <Card key={a.slug} className="flex flex-col">
-              <div className="relative">
-                <Photo src={a.image} alt={a.name} className="aspect-[16/10]" />
-                <span className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 shadow">
-                  <Icon name={a.icon} className="h-5 w-5 text-gold-dark" />
-                </span>
+            <div
+              key={a.slug}
+              className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-line shadow-sm transition-shadow hover:shadow-md"
+            >
+              <Photo
+                src={a.image}
+                alt={a.name}
+                className="absolute inset-0 h-full w-full"
+                imgClassName="transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+              <span className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 shadow">
+                <Icon name={a.icon} className="text-xl text-gold-dark" />
+              </span>
+              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                <h2 className="text-xl text-white">{a.name}</h2>
+                <p className="mt-1 line-clamp-2 text-sm text-white/85">{a.description}</p>
               </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h2 className="text-xl text-foreground">{a.name}</h2>
-                <p className="mt-2 text-sm text-ink-soft">{a.description}</p>
-              </div>
-            </Card>
+            </div>
           ))}
         </div>
       </Section>

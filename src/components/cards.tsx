@@ -1,55 +1,108 @@
 import Link from "next/link";
 import { Pi } from "@/components/Pi";
-import { Card, Badge } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import { Photo } from "@/components/Photo";
 import type { Destination } from "@/content/destinations";
 import type { Tour } from "@/content/tours";
 import type { BlogPost } from "@/content/blog";
 import type { Testimonial } from "@/content/site";
 
+/**
+ * Image cards with the caption text overlaid INSIDE the picture. A bottom-up
+ * gradient scrim keeps the white text readable over any photo.
+ */
+
+const scrim =
+  "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent";
+
 export function DestinationCard({ destination }: { destination: Destination }) {
   return (
-    <Link href={`/destinations/${destination.slug}`} className="group">
-      <Card className="h-full">
-        <Photo src={destination.image} alt={destination.name} className="aspect-[4/3]" imgClassName="transition-transform duration-500 group-hover:scale-105" />
-        <div className="p-5">
-          <h3 className="text-xl text-foreground">{destination.name}</h3>
-          <p className="mt-1 text-sm text-ink-soft">{destination.tagline}</p>
-          <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gold-dark">
+    <Link href={`/destinations/${destination.slug}`} className="group block">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line shadow-sm transition-shadow hover:shadow-md sm:aspect-[4/3]">
+        <Photo
+          src={destination.image}
+          alt={destination.name}
+          className="absolute inset-0 h-full w-full"
+          imgClassName="transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className={scrim} />
+        <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+          <h3 className="text-xl text-white">{destination.name}</h3>
+          <p className="mt-1 text-sm text-white/85">{destination.tagline}</p>
+          <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gold-light">
             Explore <Pi name="pi-arrow-right" className="text-sm transition-transform group-hover:translate-x-1" />
           </span>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 }
 
 export function TourCard({ tour }: { tour: Tour }) {
   return (
-    <Link href={`/tours/${tour.slug}`} className="group">
-      <Card className="flex h-full flex-col">
-        <Photo src={tour.image} alt={tour.name} className="aspect-[16/10]" imgClassName="transition-transform duration-500 group-hover:scale-105" />
-        <div className="flex flex-1 flex-col p-5">
-          <div className="mb-2 flex items-center gap-2">
-            <Badge>{tour.category}</Badge>
-            <span className="inline-flex items-center gap-1 text-xs text-ink-soft">
-              <Pi name="pi-clock" className="text-xs" /> {tour.durationDays} days
-            </span>
-          </div>
-          <h3 className="text-lg text-foreground">{tour.name}</h3>
-          <p className="mt-1 flex items-center gap-1 text-xs text-ink-soft">
-            <Pi name="pi-map-marker" className="text-xs text-gold-dark" /> {capitalize(tour.destinationSlug)}
+    <Link href={`/tours/${tour.slug}`} className="group block">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line shadow-sm transition-shadow hover:shadow-md sm:aspect-[4/3]">
+        <Photo
+          src={tour.image}
+          alt={tour.name}
+          className="absolute inset-0 h-full w-full"
+          imgClassName="transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className={scrim} />
+
+        {/* Top chips */}
+        <div className="absolute inset-x-0 top-0 flex items-center gap-2 p-4">
+          <span className="rounded-full bg-gold/90 px-3 py-1 text-xs font-semibold text-foreground">
+            {tour.category}
+          </span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-black/35 px-3 py-1 text-xs text-white backdrop-blur-sm">
+            <Pi name="pi-clock" className="text-xs" /> {tour.durationDays} days
+          </span>
+        </div>
+
+        {/* Bottom caption */}
+        <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+          <p className="flex items-center gap-1 text-xs text-white/80">
+            <Pi name="pi-map-marker" className="text-xs text-gold-light" /> {capitalize(tour.destinationSlug)}
           </p>
-          <p className="mt-2 flex-1 text-sm text-ink-soft">{tour.summary}</p>
-          <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gold-dark">
+          <h3 className="mt-1 text-lg text-white">{tour.name}</h3>
+          <p className="mt-1 line-clamp-2 text-sm text-white/85">{tour.summary}</p>
+          <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gold-light">
             View &amp; book <Pi name="pi-arrow-right" className="text-sm transition-transform group-hover:translate-x-1" />
           </span>
         </div>
-      </Card>
+      </div>
     </Link>
   );
 }
 
+export function BlogCard({ post }: { post: BlogPost }) {
+  return (
+    <Link href={`/blog/${post.slug}`} className="group block">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-line shadow-sm transition-shadow hover:shadow-md">
+        <Photo
+          src={post.image}
+          alt={post.title}
+          className="absolute inset-0 h-full w-full"
+          imgClassName="transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className={scrim} />
+        <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+          <time className="text-xs uppercase tracking-wider text-gold-light">
+            {new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          </time>
+          <h3 className="mt-1 text-lg text-white">{post.title}</h3>
+          <p className="mt-1 line-clamp-2 text-sm text-white/85">{post.excerpt}</p>
+          <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gold-light">
+            Read more <Pi name="pi-arrow-right" className="text-sm transition-transform group-hover:translate-x-1" />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+/** Testimonials are not image cards — keep the light panel style. */
 export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
     <Card className="h-full p-6">
@@ -62,26 +115,6 @@ export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       <p className="mt-5 text-sm font-semibold text-foreground">{testimonial.author}</p>
       <p className="text-xs text-ink-soft">{testimonial.location}</p>
     </Card>
-  );
-}
-
-export function BlogCard({ post }: { post: BlogPost }) {
-  return (
-    <Link href={`/blog/${post.slug}`} className="group">
-      <Card className="flex h-full flex-col">
-        <Photo src={post.image} alt={post.title} className="aspect-[16/9]" imgClassName="transition-transform duration-500 group-hover:scale-105" />
-        <div className="flex flex-1 flex-col p-5">
-          <time className="text-xs uppercase tracking-wider text-gold-dark">
-            {new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-          </time>
-          <h3 className="mt-2 text-lg text-foreground">{post.title}</h3>
-          <p className="mt-2 flex-1 text-sm text-ink-soft">{post.excerpt}</p>
-          <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gold-dark">
-            Read more <Pi name="pi-arrow-right" className="text-sm transition-transform group-hover:translate-x-1" />
-          </span>
-        </div>
-      </Card>
-    </Link>
   );
 }
 
