@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* ATSZ Safaris — light white + gold design system (Tailwind v4) */
+
+@theme {
+  /* Brand palette */
+  --color-background: #ffffff;
+  --color-cream: #fcfbf8;
+  --color-foreground: #1a1a1a;
+  --color-ink-soft: #4a4a46;
+
+  --color-gold: #c8a24b;
+  --color-gold-light: #e6ce8e;
+  --color-gold-dark: #a8842f;
+
+  --color-muted: #f4f1ea;
+  --color-line: #ece6d6;
+
+  /* Fonts (wired to next/font CSS variables in layout.tsx) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+
+  /* Layout */
+  --spacing-section: 6rem;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings default to the serif display face */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Signature thin gold rule used as an accent throughout the site */
+.gold-rule {
+  display: inline-block;
+  width: 3rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-gold-dark), var(--color-gold-light));
+}
+
+/* Bokun widget container spacing */
+.bokunWidget {
+  width: 100%;
+}

@@ -1,0 +1,49 @@
+"use client";
+
+import { useState } from "react";
+import { cn } from "@/lib/cn";
+
+/**
+ * Image with a graceful gradient fallback. Until real photography is dropped
+ * into /public/images, (or if a file 404s) a tasteful safari-toned gradient
+ * shows instead of a broken image. Uses a plain <img> to avoid next/image
+ * config for as-yet-missing assets.
+ */
+export function Photo({
+  src,
+  alt,
+  className,
+  imgClassName,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  imgClassName?: string;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden bg-gradient-to-br from-[#e7dcc0] via-[#d8c79a] to-[#a8842f]",
+        className,
+      )}
+    >
+      {!failed && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className={cn("h-full w-full object-cover", imgClassName)}
+        />
+      )}
+      {failed && (
+        <span className="absolute inset-0 flex items-center justify-center p-4 text-center text-xs font-medium text-white/85">
+          {alt}
+        </span>
+      )}
+    </div>
+  );
+}
