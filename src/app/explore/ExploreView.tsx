@@ -56,7 +56,7 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
             onClick={() => setOpen((o) => !o)}
             aria-haspopup="listbox"
             aria-expanded={open}
-            className="flex items-center gap-3 rounded-full border border-line bg-white px-6 py-3 text-lg font-medium text-foreground shadow-sm transition-colors hover:border-gold"
+            className="flex items-center gap-3 rounded-full border border-line bg-surface px-6 py-3 text-lg font-medium text-foreground shadow-sm transition-colors hover:border-gold"
           >
             <Pi name={current.icon} className="text-gold-dark" />
             {current.label}
@@ -69,7 +69,7 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
               <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} aria-hidden="true" />
               <ul
                 role="listbox"
-                className="absolute left-1/2 z-20 mt-2 w-60 -translate-x-1/2 overflow-hidden rounded-2xl border border-line bg-white p-1.5 text-left shadow-lg"
+                className="absolute left-1/2 z-20 mt-2 w-60 -translate-x-1/2 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 text-left shadow-lg"
               >
                 {tabs.map((t) => (
                   <li key={t.key} role="option" aria-selected={t.key === tab}>

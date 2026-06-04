@@ -8,8 +8,8 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-gold text-foreground hover:bg-gold-dark hover:text-white shadow-sm",
-  secondary: "border border-gold text-gold-dark bg-white hover:bg-muted",
+  primary: "bg-gold text-neutral-900 hover:bg-gold-dark shadow-sm",
+  secondary: "border border-gold text-gold-dark bg-surface hover:bg-muted",
   ghost: "text-foreground hover:text-gold-dark",
   whatsapp: "bg-[#25D366] text-white hover:bg-[#1da851]",
 };

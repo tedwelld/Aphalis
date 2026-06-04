@@ -11,14 +11,14 @@ import { guides, pillars, testimonials } from "@/content/site";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Africa Jungle Safaris crafts ethical, expertly-guided safaris across Southern Africa. Meet our guides and discover what drives us.",
+    "Indlulamithi Safaris & Tours crafts ethical, expertly-guided safaris across Southern Africa. Meet our guides and discover what drives us.",
 };
 
 export default function AboutPage() {
   return (
     <>
       <PageHeader
-        title="About Africa Jungle Safaris"
+        title="About Indlulamithi Safaris & Tours"
         subtitle="Ethical, expertly-guided safaris crafted by people who call this wilderness home."
       />
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
             <span className="gold-rule mb-5 block" />
             <h2 className="text-3xl text-foreground">Our story</h2>
             <p className="mt-4 text-ink-soft leading-relaxed">
-              Africa Jungle Safaris was founded on a simple belief: that travel should give
+              Indlulamithi Safaris & Tours was founded on a simple belief: that travel should give
               back to the land and people who make it unforgettable. We design
               low-impact safaris that put expert local guides, authentic encounters
               and conservation at the centre of every journey.
@@ -47,7 +47,7 @@ export default function AboutPage() {
         <SectionHeading eyebrow="What we stand for" title="Our values" />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p) => (
-            <div key={p.title} className="rounded-2xl border border-line bg-white p-6">
+            <div key={p.title} className="rounded-2xl border border-line bg-surface p-6">
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-muted">
                 <Icon name={p.icon} className="h-5 w-5 text-gold-dark" />
               </div>

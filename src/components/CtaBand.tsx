@@ -12,7 +12,7 @@ export function CtaBand({
   subtitle?: string;
 }) {
   return (
-    <section className="bg-gradient-to-br from-[#fcfbf8] to-[#f4f1ea] py-20">
+    <section className="bg-gradient-to-br from-cream to-muted py-20">
       <Container className="text-center">
         <span className="gold-rule mx-auto mb-6 block" />
         <h2 className="text-3xl sm:text-4xl text-foreground">{title}</h2>

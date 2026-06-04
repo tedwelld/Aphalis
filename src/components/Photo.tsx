@@ -21,11 +21,13 @@ export function Photo({
   imgClassName?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const hasPositionClass = /\b(absolute|fixed|sticky|relative)\b/.test(className ?? "");
 
   return (
     <div
       className={cn(
-        "relative overflow-hidden bg-gradient-to-br from-[#e7dcc0] via-[#d8c79a] to-[#a8842f]",
+        !hasPositionClass && "relative",
+        "overflow-hidden bg-gradient-to-br from-[#e7dcc0] via-[#d8c79a] to-[#a8842f]",
         className,
       )}
     >

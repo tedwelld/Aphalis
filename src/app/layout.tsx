@@ -50,6 +50,17 @@ export default function RootLayout({
       lang={siteConfig.locale}
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
+      <head>
+        {/* Runs before paint: marks JS-enabled (so scroll-reveal elements only
+            hide when JS can reveal them) and applies the saved theme to avoid a
+            flash of the wrong theme. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var e=document.documentElement;e.classList.add('js');if(localStorage.getItem('theme')==='dark'){e.classList.add('dark');}}catch(err){}})();",
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col bg-cream text-foreground">
         {/* Bokun loader — injected once; scans the page for .bokunWidget elements
             and renders the booking iframe + site-wide floating cart. */}

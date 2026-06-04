@@ -89,7 +89,7 @@ export function guestConfirmationEmail(data: BookingInput) {
         <table role="presentation" width="100%" style="max-width:560px;background:#ffffff;border:1px solid #ece6d6;border-radius:16px;overflow:hidden;">
           <tr><td style="background:${GOLD};height:6px;"></td></tr>
           <tr><td style="padding:32px 32px 8px;">
-            <h1 style="margin:0;font-size:22px;color:${INK};">Africa Jungle <span style="color:${GOLD_DARK};">Safaris</span></h1>
+            <h1 style="margin:0;font-size:22px;color:${INK};">Indlulamithi <span style="color:${GOLD_DARK};">Safaris &amp; Tours</span></h1>
           </td></tr>
           <tr><td style="padding:8px 32px 0;">
             <h2 style="margin:0 0 8px;font-size:20px;">Thank you, ${esc(data.name)} 🐘</h2>

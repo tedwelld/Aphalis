@@ -20,7 +20,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "When the rains retreat, the elephants gather. Here's how to time your Hwange safari for the very best game viewing.",
     date: "2026-05-12",
-    author: "Africa Jungle Safaris",
+    author: "Indlulamithi Safaris & Tours",
     image: demoPhoto("hwange,elephant,africa", 601, 1200, 700),
     body: `Hwange is Zimbabwe's largest national park and home to one of Africa's biggest elephant populations.
 
@@ -36,7 +36,7 @@ Whenever you visit, our guides know exactly where to be at the right time of day
     excerpt:
       "The Falls are just the beginning. Discover the adventures, cruises and culture that make this one of Africa's great destinations.",
     date: "2026-04-28",
-    author: "Africa Jungle Safaris",
+    author: "Indlulamithi Safaris & Tours",
     image: demoPhoto("victoria-falls,zambezi", 602, 1200, 700),
     body: `Most travellers come for the thundering curtain of water — and it never disappoints.
 
@@ -52,7 +52,7 @@ Talk to us about combining the icons into one seamless trip.`,
     excerpt:
       "There's no substitute for experiencing the bush on foot. Here's what makes a walking safari unforgettable.",
     date: "2026-04-02",
-    author: "Africa Jungle Safaris",
+    author: "Indlulamithi Safaris & Tours",
     image: demoPhoto("walking,safari,bush", 603, 1200, 700),
     body: `On foot, the bush reveals itself differently. You notice tracks, scents and the small details a vehicle rushes past.
 

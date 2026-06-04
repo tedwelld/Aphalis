@@ -11,7 +11,7 @@
  * args are kept only so existing call sites don't need to change.
  *
  * These are DEMO images (Unsplash license). Replace with rights-cleared
- * Africa Jungle Safaris photography by dropping files in `public/images` and
+ * Indlulamithi Safaris & Tours photography by dropping files in `public/images` and
  * updating the content files to local paths before launch.
  */
 

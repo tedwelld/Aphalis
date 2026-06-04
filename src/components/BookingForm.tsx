@@ -57,7 +57,7 @@ export function BookingForm({ tourName }: { tourName?: string }) {
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-line bg-white p-8 text-center">
+      <div className="rounded-2xl border border-line bg-surface p-8 text-center">
         <Pi name="pi-check-circle" className="mx-auto block w-fit text-4xl text-gold-dark" />
         <h3 className="mt-4 text-xl">Enquiry sent!</h3>
         <p className="mt-2 text-ink-soft">
@@ -79,7 +79,7 @@ export function BookingForm({ tourName }: { tourName?: string }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="rounded-2xl border border-line bg-white p-6 sm:p-8"
+      className="rounded-2xl border border-line bg-surface p-6 sm:p-8"
       noValidate
     >
       {/* Honeypot — visually hidden, must stay empty */}

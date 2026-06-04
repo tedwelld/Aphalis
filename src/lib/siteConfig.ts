@@ -1,22 +1,23 @@
 /**
- * Central brand + contact configuration for ATSZ Safaris.
+ * Central brand + contact configuration for Indlulamithi Safaris & Tours.
  *
  * Values prefixed with NEXT_PUBLIC_ are read from the environment so they can be
  * set per-deployment on Vercel without code changes. The literals below are
- * sensible PLACEHOLDERS — replace them (or set the env vars) with ATSZ's real
- * Bokun channel UUID, WhatsApp number, and contact details before launch.
+ * sensible PLACEHOLDERS — replace them (or set the env vars) with the company's
+ * real Bokun channel UUID, WhatsApp number, and contact details before launch.
  */
 
 export const siteConfig = {
-  name: "Africa Jungle Safaris",
+  name: "Indlulamithi Safaris & Tours",
+  shortName: "Indlulamithi",
   tagline: "Explore the wild — ethical African safaris, crafted by expert local guides.",
   description:
-    "Africa Jungle Safaris offers unforgettable, ethical safari experiences across Zimbabwe, Botswana, Namibia and Zambia — game drives, boat cruises, walking safaris and more. Book online, on WhatsApp, or by email.",
-  url: "https://africajunglesafaris.com",
+    "Indlulamithi Safaris & Tours offers unforgettable, ethical safari experiences across Zimbabwe, Botswana, Namibia and Zambia — game drives, boat cruises, walking safaris and more. Book online, on WhatsApp, or by email.",
+  url: "https://indlulamithisafaris.com",
   locale: "en",
 
   // Contact (PLACEHOLDERS — replace with the company's real details)
-  email: "bookings@africajunglesafaris.com",
+  email: "bookings@indlulamithisafaris.com",
   phoneDisplay: "+263 78 927 6807",
   whatsappNumber:
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "263789276807", // E.164, digits only (+263 78 927 6807)
@@ -38,6 +39,17 @@ export const siteConfig = {
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
     { label: "Gallery", href: "/gallery" },
+    { label: "About", href: "/about" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
+  ],
+  // Header is split around the centered logo.
+  navLeft: [
+    { label: "Home", href: "/" },
+    { label: "Explore", href: "/explore" },
+    { label: "Gallery", href: "/gallery" },
+  ],
+  navRight: [
     { label: "About", href: "/about" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },

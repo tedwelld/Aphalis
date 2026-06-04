@@ -47,7 +47,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "Africa Jungle Safaris organised everything perfectly. Booking on WhatsApp was so easy and they answered every question within minutes.",
+      "Indlulamithi Safaris & Tours organised everything perfectly. Booking on WhatsApp was so easy and they answered every question within minutes.",
     author: "Michael R.",
     location: "United States",
     rating: 5,

@@ -1,0 +1,125 @@
+import { cn } from "@/lib/cn";
+
+/**
+ * Indlulamithi Safaris & Tours emblem, drawn as SVG so it always renders
+ * (no image file needed). A circular green/gold badge with a sunset scene —
+ * giraffe + acacia — arched "INDLULAMITHI" text, "Safaris & Tours", and an
+ * "EXPLORE THE WILD" banner. `idPrefix` keeps gradient/path ids unique per
+ * instance.
+ */
+export function LogoMark({
+  idPrefix = "logo",
+  className,
+}: {
+  idPrefix?: string;
+  className?: string;
+}) {
+  const sky = `${idPrefix}-sky`;
+  const arc = `${idPrefix}-arc`;
+  const clip = `${idPrefix}-clip`;
+
+  return (
+    <svg
+      viewBox="0 0 240 240"
+      className={cn("h-auto w-auto", className)}
+      role="img"
+      aria-label="Indlulamithi Safaris & Tours"
+    >
+      <defs>
+        <linearGradient id={sky} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#f6c64f" />
+          <stop offset="55%" stopColor="#ec7d2b" />
+          <stop offset="100%" stopColor="#cf501c" />
+        </linearGradient>
+        {/* upper-arc baseline for the top text */}
+        <path id={arc} d="M 35,112 A 85,85 0 0 1 205,112" fill="none" />
+        <clipPath id={clip}>
+          <circle cx="120" cy="112" r="64" />
+        </clipPath>
+      </defs>
+
+      {/* Outer rings */}
+      <circle cx="120" cy="112" r="106" fill="#7a5a23" />
+      <circle cx="120" cy="112" r="101" fill="#3c5a34" />
+      <circle cx="120" cy="112" r="98" fill="none" stroke="#c8a24b" strokeWidth="1.5" />
+      <circle cx="120" cy="112" r="69" fill="#a8842f" />
+      <circle cx="120" cy="112" r="65" fill="#caa24f" />
+
+      {/* Sunset scene (clipped to inner circle) */}
+      <g clipPath={`url(#${clip})`}>
+        <rect x="54" y="46" width="132" height="132" fill={`url(#${sky})`} />
+        <circle cx="118" cy="120" r="30" fill="#f8d559" opacity="0.95" />
+        {/* hills */}
+        <path d="M54,150 Q86,138 120,148 T186,150 L186,178 L54,178 Z" fill="#bf4f22" />
+        <path d="M54,160 Q100,150 140,160 T186,162 L186,178 L54,178 Z" fill="#9c3d1b" />
+
+        {/* Acacia tree */}
+        <g fill="#3a2614">
+          <rect x="147.5" y="118" width="3.2" height="52" />
+          <path d="M150 124 L138 116 M150 124 L162 116 M150 130 L132 124 M150 130 L168 124" stroke="#3a2614" strokeWidth="2" />
+          <ellipse cx="150" cy="113" rx="26" ry="6" />
+          <ellipse cx="150" cy="108" rx="16" ry="5" />
+        </g>
+
+        {/* Giraffe */}
+        <g fill="#3a2614">
+          <rect x="99" y="148" width="3" height="22" />
+          <rect x="106" y="149" width="3" height="21" />
+          <rect x="114" y="148" width="3" height="22" />
+          <rect x="121" y="149" width="3" height="21" />
+          <ellipse cx="111" cy="145" rx="17" ry="8.5" />
+          <polygon points="116,143 123,141 130,96 123,95" />
+          <polygon points="123,96 134,92 135,86 129,85 122,90" />
+          <path d="M129 85 l-1 -6 M133 85 l1 -6" stroke="#3a2614" strokeWidth="1.6" />
+          <path d="M95 142 q-5 6 -3 16" stroke="#3a2614" strokeWidth="2" fill="none" />
+        </g>
+      </g>
+
+      {/* "Safaris & Tours" near the top of the inner circle */}
+      <text
+        x="120"
+        y="78"
+        textAnchor="middle"
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fontStyle="italic"
+        fontSize="11"
+        fontWeight="700"
+        fill="#4a2f17"
+      >
+        Safaris &amp; Tours
+      </text>
+
+      {/* Arched brand name */}
+      <text
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fontSize="22"
+        fontWeight="700"
+        letterSpacing="1.5"
+        fill="#e7c66a"
+      >
+        <textPath href={`#${arc}`} startOffset="50%" textAnchor="middle">
+          INDLULAMITHI
+        </textPath>
+      </text>
+
+      {/* Banner */}
+      <g>
+        <path d="M24,186 L40,180 L40,210 L24,204 Z" fill="#2c2110" />
+        <path d="M216,186 L200,180 L200,210 L216,204 Z" fill="#2c2110" />
+        <rect x="36" y="178" width="168" height="32" rx="4" fill="#3a2c1a" stroke="#caa24f" strokeWidth="1.5" />
+        <text
+          x="120"
+          y="199"
+          textAnchor="middle"
+          fontFamily="Georgia, 'Times New Roman', serif"
+          fontSize="16"
+          fontWeight="700"
+          letterSpacing="2"
+          fill="#e7c66a"
+        >
+          EXPLORE THE WILD
+        </text>
+      </g>
+    </svg>
+  );
+}

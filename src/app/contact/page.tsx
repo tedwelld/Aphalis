@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/siteConfig";
 export const metadata: Metadata = {
   title: "Contact & Booking",
   description:
-    "Plan your safari with Africa Jungle Safaris. Send an enquiry, chat on WhatsApp, or email us — we reply fast.",
+    "Plan your safari with Indlulamithi Safaris & Tours. Send an enquiry, chat on WhatsApp, or email us — we reply fast.",
 };
 
 export default function ContactPage() {

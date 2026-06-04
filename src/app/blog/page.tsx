@@ -6,7 +6,7 @@ import { blogPosts } from "@/content/blog";
 
 export const metadata: Metadata = {
   title: "Safari Journal",
-  description: "Stories, guides and tips from the Africa Jungle Safaris team across Southern Africa.",
+  description: "Stories, guides and tips from the Indlulamithi Safaris & Tours team across Southern Africa.",
 };
 
 export default function BlogPage() {

@@ -1,6 +1,6 @@
-# Africa Jungle Safaris
+# Indlulamithi Safaris & Tours
 
-Marketing + booking website for **Africa Jungle Safaris**, built with Next.js
+Marketing + booking website for **Indlulamithi Safaris & Tours**, built with Next.js
 (App Router), TypeScript and Tailwind CSS v4. Light **white + gold** theme. Guests
 can book three ways: **Bókun** online checkout, **WhatsApp**, or an **email**
 enquiry form — each with its own message template.
@@ -17,7 +17,7 @@ enquiry form — each with its own message template.
 
 ## Branding
 
-- Logo: `public/images/logo.png` (the "Africa Jungle Safaris / Explore the Wild"
+- Logo: `public/images/logo.png` (the "Indlulamithi Safaris & Tours / Explore the Wild"
   badge), rendered via `src/components/Logo.tsx` with a text-wordmark fallback if
   the file is missing.
 - Icons: PrimeIcons font (`primeicons`), imported once in `src/app/layout.tsx`.

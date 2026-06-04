@@ -7,7 +7,7 @@ import { Pi } from "@/components/Pi";
 import { Logo } from "@/components/Logo";
 import { siteConfig } from "@/lib/siteConfig";
 import { Container } from "@/components/ui/Container";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/cn";
 
 export function Header() {
@@ -17,47 +17,54 @@ export function Header() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const navLink = (item: { label: string; href: string }) => (
+    <Link
+      key={item.href}
+      href={item.href}
+      className={cn(
+        "relative text-sm font-medium text-foreground transition-colors hover:text-gold-dark",
+        isActive(item.href) &&
+          "text-gold-dark after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-full after:bg-gold",
+      )}
+    >
+      {item.label}
+    </Link>
+  );
+
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <Logo className="h-11" />
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-7 lg:flex">
-          {siteConfig.nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "relative text-sm font-medium text-foreground transition-colors hover:text-gold-dark",
-                isActive(item.href) &&
-                  "text-gold-dark after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-full after:bg-gold",
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden lg:block">
-          <WhatsAppButton size="sm" label="WhatsApp" />
+    <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur">
+      <Container className="grid h-20 grid-cols-[1fr_auto_1fr] items-center gap-4">
+        {/* Left: nav (desktop) / menu button (mobile) */}
+        <div className="flex items-center justify-start">
+          <nav className="hidden items-center gap-7 lg:flex">
+            {siteConfig.navLeft.map(navLink)}
+          </nav>
+          <button
+            className="lg:hidden"
+            aria-label="Toggle menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <Pi name="pi-times" className="text-2xl" /> : <Pi name="pi-bars" className="text-2xl" />}
+          </button>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="lg:hidden"
-          aria-label="Toggle menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <Pi name="pi-times" className="text-2xl" /> : <Pi name="pi-bars" className="text-2xl" />}
-        </button>
+        {/* Center: logo */}
+        <Link href="/" className="flex justify-center" onClick={() => setOpen(false)}>
+          <Logo className="h-14 sm:h-16" />
+        </Link>
+
+        {/* Right: nav (desktop) + theme toggle (always) */}
+        <div className="flex items-center justify-end gap-5">
+          <nav className="hidden items-center gap-7 lg:flex">
+            {siteConfig.navRight.map(navLink)}
+          </nav>
+          <ThemeToggle />
+        </div>
       </Container>
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-t border-line bg-white lg:hidden">
+        <div className="border-t border-line bg-surface lg:hidden">
           <Container className="flex flex-col gap-1 py-4">
             {siteConfig.nav.map((item) => (
               <Link
@@ -72,9 +79,6 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <div className="px-3 pt-3">
-              <WhatsAppButton size="sm" label="Book on WhatsApp" />
-            </div>
           </Container>
         </div>
       )}

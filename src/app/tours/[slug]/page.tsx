@@ -87,7 +87,7 @@ export default async function TourPage({
 
           {/* Right: sticky booking panel */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-2xl border border-line bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
               <p className="text-sm text-ink-soft">From</p>
               <p className="text-2xl font-semibold text-foreground">{tour.priceFrom ?? "On request"}</p>
 

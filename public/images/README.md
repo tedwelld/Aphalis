@@ -2,7 +2,7 @@
 
 ## Logo
 
-- `logo.png` — **brand logo** (the "Africa Jungle Safaris / Explore the Wild"
+- `logo.png` — **brand logo** (the "Indlulamithi Safaris & Tours / Explore the Wild"
   badge). Used in the header and footer via `src/components/Logo.tsx`. Until this
   file is added, a text wordmark is shown instead. **Save the shared logo here.**
 
@@ -20,8 +20,8 @@ either drop a replacement at the same `demo/<name>.jpg` path, or edit the
 
 > Note: these files must be **committed to git** so Vercel serves them.
 
-Before launch, replace the `demo/` images with rights-cleared Africa Jungle
-Safaris photography (keep the same filenames, or update `src/lib/img.ts`).
+Before launch, replace the `demo/` images with rights-cleared Indlulamithi
+Safaris & Tours photography (keep the same filenames, or update `src/lib/img.ts`).
 Recommended: landscape JPG/WebP, ~1600px wide for headers, ~800px for cards.
 The gradient placeholder in `src/components/Photo.tsx` still covers any missing
 or slow image so the layout never breaks.

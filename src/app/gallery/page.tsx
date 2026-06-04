@@ -7,7 +7,7 @@ import { gallery } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Gallery",
-  description: "Moments from the wild — photography from Africa Jungle Safaris journeys across Southern Africa.",
+  description: "Moments from the wild — photography from Indlulamithi Safaris & Tours journeys across Southern Africa.",
 };
 
 export default function GalleryPage() {
