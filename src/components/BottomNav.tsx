@@ -1,0 +1,50 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Pi } from "@/components/Pi";
+import { cn } from "@/lib/cn";
+
+const items = [
+  { label: "Home", href: "/", icon: "pi-home" },
+  { label: "Explore", href: "/explore", icon: "pi-compass" },
+  { label: "Gallery", href: "/gallery", icon: "pi-images" },
+  { label: "About", href: "/about", icon: "pi-info-circle" },
+  { label: "Blog", href: "/blog", icon: "pi-book" },
+  { label: "Contact", href: "/contact", icon: "pi-envelope" },
+];
+
+export function BottomNav() {
+  const pathname = usePathname();
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  return (
+    <nav
+      aria-label="Mobile navigation"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] backdrop-blur lg:hidden"
+    >
+      <div className="mx-auto grid max-w-md grid-cols-6 gap-1">
+        {items.map((item) => {
+          const active = isActive(item.href);
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "flex min-h-14 flex-col items-center justify-center gap-1 rounded-md px-1 text-[0.68rem] font-medium text-ink-soft transition-colors hover:bg-muted hover:text-gold-dark",
+                active && "bg-muted text-gold-dark",
+              )}
+            >
+              <Pi name={item.icon} className="text-lg" />
+              <span className="max-w-full truncate">{item.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}

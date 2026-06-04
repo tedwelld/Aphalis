@@ -5,6 +5,7 @@ import "primeicons/primeicons.css";
 import "./globals.css";
 import { siteConfig } from "@/lib/siteConfig";
 import { Header } from "@/components/Header";
+import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppButton";
 import { StructuredData } from "@/components/StructuredData";
@@ -61,7 +62,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex min-h-full flex-col bg-cream text-foreground">
+      <body className="flex min-h-full flex-col bg-cream pb-20 text-foreground lg:pb-0">
         {/* Bokun loader — injected once; scans the page for .bokunWidget elements
             and renders the booking iframe + site-wide floating cart. */}
         {bokunConfigured && <Script src={bokunLoader} strategy="afterInteractive" />}
@@ -70,6 +71,7 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <BottomNav />
         <WhatsAppFab />
       </body>
     </html>
