@@ -27,6 +27,7 @@ export default async function ExplorePage({
       <PageHeader
         title="Explore Our Safaris"
         subtitle="Destinations, activities and tours — all in one place. Pick a view to begin."
+        image="/images/driving.jpeg"
       />
       {/* key remounts the view when the ?view= query changes so the right tab shows */}
       <ExploreView key={initialTab} initialTab={initialTab} />

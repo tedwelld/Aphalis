@@ -12,7 +12,11 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <>
-      <PageHeader title="Safari Journal" subtitle="Stories, tips and inspiration from the field." />
+      <PageHeader
+        title="Safari Journal"
+        subtitle="Stories, tips and inspiration from the field."
+        image="/images/nightsighting.jpeg"
+      />
       <Section>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {blogPosts.map((p) => (

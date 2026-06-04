@@ -13,7 +13,11 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <>
-      <PageHeader title="Gallery" subtitle="Moments from the wild, captured on our journeys." />
+      <PageHeader
+        title="Gallery"
+        subtitle="Moments from the wild, captured on our journeys."
+        image="/images/Sunset.jpeg"
+      />
       <Section>
         <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 [&>*]:mb-4">
           {gallery.map((img, i) => (

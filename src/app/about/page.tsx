@@ -20,6 +20,7 @@ export default function AboutPage() {
       <PageHeader
         title="About Indlulamithi Safaris & Tours"
         subtitle="Ethical, expertly-guided safaris crafted by people who call this wilderness home."
+        image="/images/walk.jpeg"
       />
 
       <Section>
