@@ -18,7 +18,7 @@ export function CtaBand({
         <h2 className="text-3xl sm:text-4xl text-foreground">{title}</h2>
         <p className="mx-auto mt-4 max-w-xl text-ink-soft">{subtitle}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <ButtonLink href="/tours">Browse &amp; book online</ButtonLink>
+          <ButtonLink href="/explore?view=tours">Browse &amp; book online</ButtonLink>
           <WhatsAppButton variant="whatsapp" />
           <ButtonLink href="/contact" variant="secondary">
             <Pi name="pi-envelope" className="text-base" /> Email enquiry

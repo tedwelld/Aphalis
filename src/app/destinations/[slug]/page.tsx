@@ -55,7 +55,7 @@ export default async function DestinationPage({
               ))}
             </ul>
             <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/tours">View tours</ButtonLink>
+              <ButtonLink href="/explore?view=tours">View tours</ButtonLink>
               <WhatsAppButton variant="secondary" details={{ tourName: `${destination.name} safari` }} />
             </div>
           </div>

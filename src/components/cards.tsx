@@ -14,11 +14,13 @@ import type { Testimonial } from "@/content/site";
 
 const scrim =
   "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent";
+const pictureTile =
+  "relative mx-auto aspect-[16/11] w-full max-w-[22rem] overflow-hidden rounded-xl transition-transform duration-300 group-hover:-translate-y-0.5";
 
 export function DestinationCard({ destination }: { destination: Destination }) {
   return (
     <Link href={`/destinations/${destination.slug}`} className="group block">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line shadow-sm transition-shadow hover:shadow-md sm:aspect-[4/3]">
+      <div className={pictureTile}>
         <Photo
           src={destination.image}
           alt={destination.name}
@@ -41,7 +43,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
 export function TourCard({ tour }: { tour: Tour }) {
   return (
     <Link href={`/tours/${tour.slug}`} className="group block">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-line shadow-sm transition-shadow hover:shadow-md sm:aspect-[4/3]">
+      <div className={pictureTile}>
         <Photo
           src={tour.image}
           alt={tour.name}
@@ -79,7 +81,7 @@ export function TourCard({ tour }: { tour: Tour }) {
 export function BlogCard({ post }: { post: BlogPost }) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-line shadow-sm transition-shadow hover:shadow-md">
+      <div className={pictureTile}>
         <Photo
           src={post.image}
           alt={post.title}

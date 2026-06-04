@@ -27,7 +27,7 @@ export function Hero() {
           expert local guides. Book online, on WhatsApp, or by email.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink href="/tours" size="lg">
+          <ButtonLink href="/explore?view=tours" size="lg">
             Explore Tours
           </ButtonLink>
           <WhatsAppButton size="lg" />

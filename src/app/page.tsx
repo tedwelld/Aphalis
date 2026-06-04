@@ -48,7 +48,7 @@ export default function HomePage() {
           ))}
         </div>
         <div className="mt-10 text-center">
-          <ButtonLink href="/activities" variant="secondary">
+          <ButtonLink href="/explore?view=activities" variant="secondary">
             See all activities <Pi name="pi-arrow-right" className="text-base" />
           </ButtonLink>
         </div>
@@ -67,7 +67,7 @@ export default function HomePage() {
           ))}
         </div>
         <div className="mt-10 text-center">
-          <ButtonLink href="/tours">
+          <ButtonLink href="/explore?view=tours">
             Browse all tours <Pi name="pi-arrow-right" className="text-base" />
           </ButtonLink>
         </div>
