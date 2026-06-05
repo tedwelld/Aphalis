@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Pi } from "@/components/Pi";
 import { Section } from "@/components/ui/Section";
 import { DestinationCard, TourCard } from "@/components/cards";
@@ -11,6 +11,8 @@ import { destinations } from "@/content/destinations";
 import { activities } from "@/content/activities";
 import { tours } from "@/content/tours";
 import { cn } from "@/lib/cn";
+
+type ProductStat = { id: number; reviewCount: number; reviewRating: number; title: string };
 
 export type ExploreTab = "destinations" | "activities" | "tours";
 
@@ -42,7 +44,19 @@ const tabs: { key: ExploreTab; label: string; icon: string; blurb: string }[] = 
 export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
   const [tab, setTab] = useState<ExploreTab>(initialTab);
   const [open, setOpen] = useState(false);
+  const [stats, setStats] = useState<Map<number, ProductStat>>(new Map());
   const current = tabs.find((t) => t.key === tab)!;
+
+  useEffect(() => {
+    fetch("/api/bokun/stats")
+      .then((r) => r.json())
+      .then((data: ProductStat[]) => {
+        const map = new Map<number, ProductStat>();
+        data.forEach((s) => map.set(s.id, s));
+        setStats(map);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <Section>
@@ -137,7 +151,13 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
       {tab === "tours" && (
         <div className="space-y-12">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {tours.map((t) => (
+            {[...tours]
+              .sort((a, b) => {
+                const aCount = a.bokunProductId ? (stats.get(a.bokunProductId)?.reviewCount ?? a.bookingCount ?? 0) : (a.bookingCount ?? 0);
+                const bCount = b.bokunProductId ? (stats.get(b.bokunProductId)?.reviewCount ?? b.bookingCount ?? 0) : (b.bookingCount ?? 0);
+                return bCount - aCount;
+              })
+              .map((t) => (
               <TourCard key={t.slug} tour={t} />
             ))}
           </div>

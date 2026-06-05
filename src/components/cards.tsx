@@ -41,8 +41,10 @@ export function DestinationCard({ destination }: { destination: Destination }) {
 }
 
 export function TourCard({ tour }: { tour: Tour }) {
+  const href = tour.bokunProductId ? `/product/${tour.bokunProductId}` : `/tours/${tour.slug}`;
+  const durationLabel = tour.durationDays > 0 ? `${tour.durationDays} days` : "1 hour";
   return (
-    <Link href={`/tours/${tour.slug}`} className="group block">
+    <Link href={href} className="group block">
       <div className={pictureTile}>
         <Photo
           src={tour.image}
@@ -52,24 +54,25 @@ export function TourCard({ tour }: { tour: Tour }) {
         />
         <div className={scrim} />
 
-        {/* Top chips */}
         <div className="absolute inset-x-0 top-0 flex items-center gap-2 p-4">
           <span className="rounded-full bg-gold/90 px-3 py-1 text-xs font-semibold text-foreground">
             {tour.category}
           </span>
           <span className="inline-flex items-center gap-1 rounded-full bg-black/35 px-3 py-1 text-xs text-white backdrop-blur-sm">
-            <Pi name="pi-clock" className="text-xs" /> {tour.durationDays} days
+            <Pi name="pi-clock" className="text-xs" /> {durationLabel}
           </span>
         </div>
 
-        {/* Bottom caption */}
         <div className="absolute inset-x-0 bottom-0 p-5 text-white">
           <p className="flex items-center gap-1 text-xs text-white/80">
             <Pi name="pi-map-marker" className="text-xs text-gold-light" /> {capitalize(tour.destinationSlug)}
           </p>
           <h3 className="mt-1 text-lg text-white">{tour.name}</h3>
           <p className="mt-1 line-clamp-2 text-sm text-white/85">{tour.summary}</p>
-          <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gold-light">
+          {tour.priceFrom && !tour.priceFrom.startsWith("$ on") && (
+            <p className="mt-1 text-sm font-semibold text-gold-light">From {tour.priceFrom}</p>
+          )}
+          <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-gold-light">
             View &amp; book <Pi name="pi-arrow-right" className="text-sm transition-transform group-hover:translate-x-1" />
           </span>
         </div>

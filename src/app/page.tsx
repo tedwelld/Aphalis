@@ -7,10 +7,10 @@ import { CtaBand } from "@/components/CtaBand";
 import { Icon } from "@/components/Icon";
 import { Photo } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
-import { DestinationCard, TourCard, TestimonialCard, BlogCard } from "@/components/cards";
+import { DestinationCard, TestimonialCard, BlogCard } from "@/components/cards";
+import { FeaturedListings } from "@/components/FeaturedListings";
 import { destinations } from "@/content/destinations";
 import { activities } from "@/content/activities";
-import { tours } from "@/content/tours";
 import { guides, testimonials, pillars } from "@/content/site";
 import { blogPosts } from "@/content/blog";
 
@@ -63,22 +63,18 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* Featured tours */}
-      <Section>
+      {/* Featured listings — most booked */}
+      <Section muted>
         <Reveal>
           <SectionHeading
-            eyebrow="Popular journeys"
+            eyebrow="Most booked"
             title="Featured Safari Tours"
-            description="Hand-crafted itineraries you can book online, on WhatsApp, or by email."
+            description="Our most popular itineraries, loved by travellers. Book online, on WhatsApp, or by email."
           />
         </Reveal>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {tours.slice(0, 3).map((t, i) => (
-            <Reveal key={t.slug} delay={i * 90}>
-              <TourCard tour={t} />
-            </Reveal>
-          ))}
-        </div>
+        <Reveal>
+          <FeaturedListings />
+        </Reveal>
         <div className="mt-10 text-center">
           <ButtonLink href="/explore?view=tours">
             Browse all tours <Pi name="pi-arrow-right" className="text-base" />

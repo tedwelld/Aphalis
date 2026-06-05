@@ -27,6 +27,10 @@ export const siteConfig = {
   bokunChannelUUID:
     process.env.NEXT_PUBLIC_BOKUN_CHANNEL_UUID ??
     "00000000-0000-0000-0000-000000000000",
+  /** Bokun product-list id for the "featured / most sold" section. */
+  bokunFeaturedListId: process.env.NEXT_PUBLIC_BOKUN_FEATURED_LIST_ID ?? "",
+  /** Default currency for Bokun API pricing queries. */
+  bokunDefaultCurrency: process.env.NEXT_PUBLIC_BOKUN_DEFAULT_CURRENCY ?? "USD",
 
   socials: {
     facebook: "https://facebook.com/",

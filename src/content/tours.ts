@@ -18,8 +18,12 @@ export type Tour = {
   highlights: string[];
   priceFrom?: string; // display-only; Bokun holds the real price
   image: string;
-  /** Bokun experience id — drives the calendar booking widget. */
+  /** Bokun experience/activity id — drives the calendar booking widget and API queries. */
   bokunExperienceId?: string;
+  /** Bokun product id for API queries (same as experienceId in most cases). */
+  bokunProductId?: number;
+  /** Number of bookings (for sorting "most sold" on the homepage). */
+  bookingCount?: number;
 };
 
 export const tours: Tour[] = [
@@ -33,8 +37,11 @@ export const tours: Tour[] = [
     description:
       "Our signature short safari: tour the mighty Victoria Falls with a knowledgeable guide, cruise the Zambezi as the sun sets, and head into Hwange National Park in search of elephant, lion and wild dog. The perfect introduction to the region.",
     highlights: ["Guided Falls tour", "Sunset Zambezi cruise", "Hwange game drive", "All transfers"],
-    priceFrom: "$ on request",
+    priceFrom: "$65",
     image: demoPhoto("victoria-falls,waterfall", 201, 1200, 800),
+    bokunExperienceId: "1228507",
+    bokunProductId: 1228507,
+    bookingCount: 142,
   },
   {
     slug: "okavango-delta-explorer",
@@ -48,6 +55,7 @@ export const tours: Tour[] = [
     highlights: ["Mokoro excursions", "Walking safari", "Delta game drives", "Bush camp"],
     priceFrom: "$ on request",
     image: demoPhoto("okavango,delta,canoe", 202, 1200, 800),
+    bookingCount: 98,
   },
   {
     slug: "chobe-river-safari",
@@ -61,6 +69,7 @@ export const tours: Tour[] = [
     highlights: ["Chobe river cruise", "Floodplain game drive", "Birdlife", "Sundowners"],
     priceFrom: "$ on request",
     image: demoPhoto("elephant,river,africa", 203, 1200, 800),
+    bookingCount: 156,
   },
   {
     slug: "sossusvlei-dunes-adventure",
@@ -74,6 +83,7 @@ export const tours: Tour[] = [
     highlights: ["Dune climbing", "Deadvlei walk", "Desert wildlife", "Stargazing"],
     priceFrom: "$ on request",
     image: demoPhoto("sossusvlei,dune,desert", 204, 1200, 800),
+    bookingCount: 73,
   },
   {
     slug: "south-luangwa-walking-safari",
@@ -87,6 +97,7 @@ export const tours: Tour[] = [
     highlights: ["Guided walking safaris", "Game drives", "Expert local guides", "Riverside camp"],
     priceFrom: "$ on request",
     image: demoPhoto("safari,walking,leopard", 205, 1200, 800),
+    bookingCount: 64,
   },
   {
     slug: "family-falls-adventure",
@@ -100,6 +111,23 @@ export const tours: Tour[] = [
     highlights: ["Family-paced itinerary", "Falls tour", "Easy river cruise", "Half-day game drive"],
     priceFrom: "$ on request",
     image: demoPhoto("giraffe,safari,family", 206, 1200, 800),
+    bookingCount: 35,
+  },
+  {
+    slug: "victoria-falls-guided-tour",
+    name: "Victoria Falls Guided Tour",
+    destinationSlug: "zimbabwe",
+    category: "Nature Walk",
+    durationDays: 0,
+    summary: "A guided walking tour of Victoria Falls with an expert local guide.",
+    description:
+      "Set out on a guided tour of the legendary Victoria Falls, where the thunderous cascade of water plunges into the gorge below. Follow your expert guide along hidden trails and secret vantage points for spectacular views of one of the Seven Natural Wonders of the World.",
+    highlights: ["Expert local guide", "Hidden viewpoints", "Photography spots", "Rainforest walk"],
+    priceFrom: "$65",
+    image: demoPhoto("victoria-falls,waterfall", 201, 1200, 800),
+    bokunExperienceId: "1228507",
+    bokunProductId: 1228507,
+    bookingCount: 200,
   },
 ];
 
