@@ -381,7 +381,7 @@ export function BookingModal({
 
       {/* Right: booking sidebar */}
       <div className="w-full max-w-sm border-l border-line p-6 overflow-y-auto">
-        <p className="text-xl font-semibold text-foreground">{currencySymbol}{totalPrice || (pricingCategories[0]?.price ?? 0)} <span className="text-sm font-normal text-ink-soft">/ person</span></p>
+        <p className="text-xl font-semibold text-foreground">{currencySymbol}{totalPrice || (pricingCategories[0]?.price ?? 0)} <span className="text-sm font-normal text-ink-soft">USD</span></p>
 
         {/* Participants */}
         <div className="mt-6 space-y-4">
