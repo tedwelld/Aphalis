@@ -8,11 +8,14 @@ import { Logo } from "@/components/Logo";
 import { siteConfig } from "@/lib/siteConfig";
 import { Container } from "@/components/ui/Container";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { CartButton } from "@/components/CartButton";
+import { CartModal } from "@/components/CartModal";
 import { cn } from "@/lib/cn";
 
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -32,7 +35,7 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-line bg-surface">
       <Container className="grid h-20 grid-cols-[1fr_auto_1fr] items-center gap-4">
         {/* Left: nav (desktop) / menu button (mobile) */}
         <div className="flex items-center justify-start">
@@ -58,6 +61,7 @@ export function Header() {
           <nav className="hidden items-center gap-7 lg:flex">
             {siteConfig.navRight.map(navLink)}
           </nav>
+          <CartButton onClick={() => setCartOpen(true)} />
           <ThemeToggle />
         </div>
       </Container>
@@ -82,6 +86,7 @@ export function Header() {
           </Container>
         </div>
       )}
+      <CartModal open={cartOpen} onClose={() => setCartOpen(false)} />
     </header>
   );
 }

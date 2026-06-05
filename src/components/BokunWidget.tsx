@@ -1,5 +1,4 @@
 import { siteConfig } from "@/lib/siteConfig";
-import { cn } from "@/lib/cn";
 
 type WidgetType = "calendar" | "list";
 
@@ -23,24 +22,9 @@ export function BokunWidget({
   className?: string;
 }) {
   const uuid = siteConfig.bokunChannelUUID;
-  const placeholder = !bokunId || !uuid || uuid.startsWith("00000000");
 
-  if (placeholder) {
-    return (
-      <div
-        className={cn(
-          "rounded-2xl border border-dashed border-line bg-muted p-8 text-center text-ink-soft",
-          className,
-        )}
-      >
-        <p className="font-medium text-foreground">Online booking widget</p>
-        <p className="mt-2 text-sm">
-          The Bókun booking widget will appear here once the channel UUID and
-          experience ID are configured. In the meantime, please book via WhatsApp
-          or the enquiry form.
-        </p>
-      </div>
-    );
+  if (!bokunId || !uuid || uuid.startsWith("00000000")) {
+    return null;
   }
 
   const path =
