@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { createPortal } from "react-dom";
 import { Pi } from "@/components/Pi";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/cart-context";
@@ -16,8 +17,8 @@ export function CartModal({ open, onClose, onCheckout }: Props) {
 
   if (!open) return null;
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/80 px-4 pt-24 pb-8 overflow-y-auto" style={{ willChange: "transform" }} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/80 px-4 pt-24 pb-8 overflow-y-auto" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="w-full max-w-lg rounded-3xl border border-line bg-surface p-6 shadow-2xl sm:p-8 max-h-[85vh] overflow-y-auto">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-foreground">
@@ -81,4 +82,7 @@ export function CartModal({ open, onClose, onCheckout }: Props) {
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modalContent, document.body);
 }

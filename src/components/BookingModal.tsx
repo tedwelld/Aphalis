@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Pi } from "@/components/Pi";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
@@ -627,8 +628,8 @@ export function BookingModal({
     </div>
   );
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/80 px-4 pt-24 pb-8 overflow-y-auto" style={{ willChange: "transform" }}
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/80 px-4 pt-24 pb-8 overflow-y-auto"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="flex w-full max-w-5xl max-h-[90vh] flex-col rounded-3xl border border-line bg-surface shadow-2xl overflow-hidden">
         {/* Top bar */}
@@ -664,4 +665,7 @@ export function BookingModal({
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modalContent, document.body);
 }

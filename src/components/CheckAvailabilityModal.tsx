@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Pi } from "@/components/Pi";
 import { Button } from "@/components/ui/Button";
@@ -94,10 +95,9 @@ export function CheckAvailabilityModal({
     ? ({ EASY: "Easy", MODERATE: "Moderate", HARD: "Hard", CHALLENGING: "Challenging" } as Record<string, string>)[selected.difficultyLevel] ?? selected.difficultyLevel
     : selected?.activityType ?? "Activity";
 
-  return (
+  const modalContent = (
     <div
-      key={resetKey}
-      className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/80 px-4 pt-24 pb-8 overflow-y-auto" style={{ willChange: "transform" }}
+      className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/80 px-4 pt-24 pb-8 overflow-y-auto"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -281,4 +281,7 @@ export function CheckAvailabilityModal({
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modalContent, document.body);
 }

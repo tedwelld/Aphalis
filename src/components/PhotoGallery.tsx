@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Photo } from "@/components/Photo";
 import { Pi } from "@/components/Pi";
 import { cn } from "@/lib/cn";
@@ -90,9 +91,9 @@ export function PhotoGallery({ images }: { images: GalleryImage[] }) {
       </div>
 
       {/* Lightbox overlay */}
-      {lightbox && (
+      {lightbox && typeof document !== "undefined" && createPortal(
         <div
-          className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/90 px-4 pt-24 pb-8 overflow-y-auto" style={{ willChange: "transform" }}
+          className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/90 px-4 pt-24 pb-8 overflow-y-auto"
           onClick={(e) => { if (e.target === e.currentTarget) setLightbox(false); }}
         >
           <button
@@ -132,7 +133,8 @@ export function PhotoGallery({ images }: { images: GalleryImage[] }) {
             alt={images[active].alt}
             className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain"
           />
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
