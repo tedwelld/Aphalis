@@ -32,8 +32,8 @@ export function FeaturedListings() {
       body: JSON.stringify({ page: 1, pageSize: 50 }),
     })
       .then((r) => r.json())
-      .then((data: { results: any[] }) => {
-        const list: Product[] = (data.results ?? [])
+      .then((data: { items: any[] }) => {
+        const list: Product[] = (data.items ?? [])
           .map((p: any) => ({
             id: p.id,
             title: p.title,

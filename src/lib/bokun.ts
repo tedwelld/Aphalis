@@ -156,10 +156,12 @@ export type BokunAvailability = {
 };
 
 export type BokunSearchResult = {
-  page: number;
-  pageSize: number;
-  totalResults: number;
-  results: BokunProduct[];
+  tookInMillis: number;
+  totalHits: number;
+  tagFilters: string[];
+  tagFacets: any[];
+  termFacets: Record<string, any>;
+  items: BokunProduct[];
 };
 
 // ---------------------------------------------------------------------------

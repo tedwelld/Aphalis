@@ -99,7 +99,7 @@ export default async function ProductPage({ params }: Props) {
   const minParticipants = (product as any).minParticipants;
   const maxParticipants = (product as any).maxParticipants;
 
-  const relatedProducts = (searchResult?.results ?? [])
+  const relatedProducts = (searchResult?.items ?? [])
     .filter((p: any) => p.id !== productId)
     .slice(0, 4)
     .map((p: any) => ({

@@ -32,21 +32,30 @@ export function CheckAvailabilityModal({
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [date, setDate] = useState("");
   const [guests, setGuests] = useState("2");
+  const [availError, setAvailError] = useState("");
 
-  const resetKey = open ? "open" : "closed";
+  useEffect(() => { if (!open) setAvailError(""); }, [open]);
 
   useEffect(() => {
     if (!open) return;
     setLoading(true);
+    setProducts([]);
+    setAvailError("");
     fetch("/api/bokun/activity.json/search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ page: 1, pageSize: 50 }),
     })
-      .then((r) => r.json())
-      .then((data: { results: any[] }) => {
+      .then(async (r) => {
+        if (!r.ok) {
+          const text = await r.text().catch(() => "");
+          throw new Error(`HTTP ${r.status}: ${text}`);
+        }
+        return r.json();
+      })
+      .then((data: any) => {
         setProducts(
-          (data.results ?? []).map((p: any) => ({
+          (Array.isArray(data.items) ? data.items : []).map((p: any) => ({
             id: p.id,
             title: p.title,
             excerpt: p.excerpt ?? p.summary,
@@ -56,7 +65,9 @@ export function CheckAvailabilityModal({
           })),
         );
       })
-      .catch(() => {})
+      .catch((err: Error) => {
+        setAvailError(err.message);
+      })
       .finally(() => setLoading(false));
   }, [open]);
 
@@ -153,6 +164,8 @@ export function CheckAvailabilityModal({
               <p className="text-sm text-ink-soft">Select a safari to check availability:</p>
               {loading ? (
                 <p className="mt-4 text-sm text-ink-soft">Loading available tours...</p>
+              ) : availError ? (
+                <p className="mt-4 text-sm text-red-600">Error: {availError}</p>
               ) : products.length === 0 ? (
                 <p className="mt-4 text-sm text-ink-soft">No tours available at the moment.</p>
               ) : (
