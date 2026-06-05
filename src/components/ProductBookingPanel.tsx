@@ -9,25 +9,60 @@ import { BookingModal } from "@/components/BookingModal";
 type Props = {
   productId: number;
   title: string;
+  description?: string;
+  excerpt?: string;
+  highlights?: string[];
+  inclusions?: string[];
+  exclusions?: string[];
+  knowBeforeYouGo?: { title: string }[];
+  location?: { lat: number; lng: number; address?: string };
+  meetingType?: string;
+  durationText?: string;
+  difficulty?: string;
+  reviewRating?: number;
+  reviewCount?: number;
+  vendor?: { id: number; title: string };
+  bookingType?: string;
+  capacityType?: string;
+  maxParticipants?: number;
+  cancellationPolicy?: any;
+  requirements?: string[];
+  photoUrls?: string[];
   priceFrom?: string;
   currency: string;
-  durationText?: string;
   availabilities: any[];
-  pricingCategories: { id: number; title: string; price: number }[];
+  pricingCategories: { id: number; title: string; price: number; ticketCategory?: string; defaultCategory?: boolean }[];
   startTimes: string[];
 };
 
 export function ProductBookingPanel({
   productId,
   title,
+  description,
+  excerpt,
+  highlights,
+  inclusions,
+  exclusions,
+  knowBeforeYouGo,
+  location,
+  meetingType,
+  durationText,
+  difficulty,
+  reviewRating,
+  reviewCount,
+  vendor,
+  bookingType,
+  capacityType,
+  maxParticipants,
+  cancellationPolicy,
+  requirements,
+  photoUrls,
   priceFrom,
   currency,
-  durationText,
   availabilities,
   pricingCategories,
   startTimes,
 }: Props) {
-  const [guests, setGuests] = useState(1);
   const [showModal, setShowModal] = useState(false);
 
   const selectedDate = availabilities.find((a: any) => !a.soldOut);
@@ -53,49 +88,6 @@ export function ProductBookingPanel({
             </div>
           )}
 
-          <div>
-            <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-ink-soft">
-              Guests
-            </label>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setGuests(Math.max(1, guests - 1))}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-foreground hover:bg-muted transition-colors"
-              >
-                <Pi name="pi-minus" className="text-sm" />
-              </button>
-              <span className="w-8 text-center text-lg font-semibold text-foreground">{guests}</span>
-              <button
-                type="button"
-                onClick={() => setGuests(Math.min(20, guests + 1))}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-line text-foreground hover:bg-muted transition-colors"
-              >
-                <Pi name="pi-plus" className="text-sm" />
-              </button>
-            </div>
-          </div>
-
-          {pricingCategories.length > 0 && displayPrice && (
-            <div className="rounded-xl bg-muted p-4">
-              <p className="text-sm font-medium text-foreground">Price breakdown</p>
-              {pricingCategories.map((pc) => (
-                <div key={pc.id} className="mt-2 flex justify-between text-sm">
-                  <span className="text-ink-soft">{pc.title}</span>
-                  <span className="text-foreground">{pc.price} {currency}</span>
-                </div>
-              ))}
-              <div className="mt-3 flex justify-between border-t border-line pt-3 text-sm font-semibold">
-                <span className="text-foreground">Total</span>
-                <span className="text-gold-dark">
-                  {guests > 0 && pricingCategories.length > 0 && pricingCategories[0].price
-                    ? `${guests * pricingCategories[0].price} ${currency}`
-                    : "—"}
-                </span>
-              </div>
-            </div>
-          )}
-
           <Button className="w-full" size="lg" onClick={() => setShowModal(true)}>
             <Pi name="pi-calendar" className="text-lg" />
             Book now
@@ -108,15 +100,36 @@ export function ProductBookingPanel({
         </div>
       </div>
 
-      <BookingModal
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        productId={productId}
-        title={title}
-        pricingCategories={pricingCategories}
-        startTimes={startTimes}
-        currency={currency}
-      />
+      {showModal && (
+        <BookingModal
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          productId={productId}
+          title={title}
+          description={description}
+          excerpt={excerpt}
+          highlights={highlights}
+          inclusions={inclusions}
+          exclusions={exclusions}
+          knowBeforeYouGo={knowBeforeYouGo}
+          location={location}
+          meetingType={meetingType}
+          durationText={durationText}
+          difficulty={difficulty}
+          reviewRating={reviewRating}
+          reviewCount={reviewCount}
+          vendor={vendor}
+          bookingType={bookingType}
+          capacityType={capacityType}
+          maxParticipants={maxParticipants}
+          cancellationPolicy={cancellationPolicy}
+          requirements={requirements}
+          photoUrls={photoUrls}
+          pricingCategories={pricingCategories}
+          startTimes={startTimes}
+          currency={currency}
+        />
+      )}
     </>
   );
 }

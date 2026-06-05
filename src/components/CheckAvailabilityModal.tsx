@@ -5,9 +5,17 @@ import { useRouter } from "next/navigation";
 import { Pi } from "@/components/Pi";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
-import { tours } from "@/content/tours";
 
 type Step = "tour" | "dates" | "guests" | "done";
+
+type Product = {
+  id: number;
+  title: string;
+  excerpt?: string;
+  durationText?: string;
+  difficultyLevel?: string;
+  activityType?: string;
+};
 
 export function CheckAvailabilityModal({
   open,
@@ -18,12 +26,38 @@ export function CheckAvailabilityModal({
 }) {
   const router = useRouter();
   const [step, setStep] = useState<Step>("tour");
-  const [selectedTour, setSelectedTour] = useState<string>("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [date, setDate] = useState("");
   const [guests, setGuests] = useState("2");
 
-  // key-based remount when open toggles resets all state
   const resetKey = open ? "open" : "closed";
+
+  useEffect(() => {
+    if (!open) return;
+    setLoading(true);
+    fetch("/api/bokun/activity.json/search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ page: 1, pageSize: 50 }),
+    })
+      .then((r) => r.json())
+      .then((data: { results: any[] }) => {
+        setProducts(
+          (data.results ?? []).map((p: any) => ({
+            id: p.id,
+            title: p.title,
+            excerpt: p.excerpt ?? p.summary,
+            durationText: p.durationText,
+            difficultyLevel: p.difficultyLevel,
+            activityType: p.activityType,
+          })),
+        );
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -46,28 +80,29 @@ export function CheckAvailabilityModal({
     else if (step === "done") setStep("guests");
   };
 
-  const handleViewTour = () => {
-    if (selectedTour) {
+  const handleViewProduct = () => {
+    if (selectedId) {
       onClose();
-      router.push(`/tours/${selectedTour}`);
+      router.push(`/product/${selectedId}`);
     }
   };
 
   if (!open) return null;
 
-  const selectedTourData = tours.find((t) => t.slug === selectedTour);
+  const selected = products.find((p) => p.id === selectedId);
+  const difficultyLabel = selected?.difficultyLevel
+    ? ({ EASY: "Easy", MODERATE: "Moderate", HARD: "Hard", CHALLENGING: "Challenging" } as Record<string, string>)[selected.difficultyLevel] ?? selected.difficultyLevel
+    : selected?.activityType ?? "Activity";
 
   return (
     <div
       key={resetKey}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[9999] flex items-start justify-center bg-black/80 px-4 pt-24 pb-8 overflow-y-auto" style={{ willChange: "transform" }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div
-        className="w-full max-w-lg rounded-3xl border border-line bg-surface p-6 shadow-2xl sm:p-8"
-      >
+      <div className="w-full max-w-lg rounded-3xl border border-line bg-surface p-6 shadow-2xl sm:p-8">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -112,43 +147,51 @@ export function CheckAvailabilityModal({
 
         {/* Step content */}
         <div className="mt-6">
-          {/* Step 1: Pick a tour */}
+          {/* Step 1: Pick a tour from API */}
           {step === "tour" && (
             <div>
               <p className="text-sm text-ink-soft">Select a safari to check availability:</p>
-              <div className="mt-3 max-h-60 space-y-2 overflow-y-auto">
-                {tours.map((t) => (
-                  <button
-                    key={t.slug}
-                    type="button"
-                    onClick={() => {
-                      setSelectedTour(t.slug);
-                      setTimeout(next, 200);
-                    }}
-                    className={cn(
-                      "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all",
-                      selectedTour === t.slug
-                        ? "border-gold bg-gold/5"
-                        : "border-line hover:border-gold/50",
-                    )}
-                  >
-                    <div
+              {loading ? (
+                <p className="mt-4 text-sm text-ink-soft">Loading available tours...</p>
+              ) : products.length === 0 ? (
+                <p className="mt-4 text-sm text-ink-soft">No tours available at the moment.</p>
+              ) : (
+                <div className="mt-3 max-h-60 space-y-2 overflow-y-auto">
+                  {products.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedId(p.id);
+                        setTimeout(next, 200);
+                      }}
                       className={cn(
-                        "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-                        selectedTour === t.slug ? "border-gold bg-gold" : "border-line",
+                        "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all",
+                        selectedId === p.id
+                          ? "border-gold bg-gold/5"
+                          : "border-line hover:border-gold/50",
                       )}
                     >
-                      {selectedTour === t.slug && <Pi name="pi-check" className="text-xs text-neutral-900" />}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{t.name}</p>
-                      <p className="text-xs text-ink-soft">{t.durationDays} days · {t.category}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
+                      <div
+                        className={cn(
+                          "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                          selectedId === p.id ? "border-gold bg-gold" : "border-line",
+                        )}
+                      >
+                        {selectedId === p.id && <Pi name="pi-check" className="text-xs text-neutral-900" />}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{p.title}</p>
+                        {p.durationText && (
+                          <p className="text-xs text-ink-soft">{p.durationText}</p>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
               <div className="mt-5 flex justify-end">
-                <Button onClick={next} disabled={!selectedTour}>
+                <Button onClick={next} disabled={!selectedId}>
                   Continue <Pi name="pi-arrow-right" className="text-sm" />
                 </Button>
               </div>
@@ -204,7 +247,7 @@ export function CheckAvailabilityModal({
           )}
 
           {/* Step 4: Done */}
-          {step === "done" && selectedTourData && (
+          {step === "done" && selected && (
             <div className="text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
                 <Pi name="pi-check-circle" className="text-3xl text-gold-dark" />
@@ -213,7 +256,7 @@ export function CheckAvailabilityModal({
               <div className="mt-4 rounded-xl bg-muted p-4 text-left text-sm">
                 <p className="flex justify-between">
                   <span className="text-ink-soft">Tour:</span>
-                  <span className="font-medium text-foreground">{selectedTourData.name}</span>
+                  <span className="font-medium text-foreground">{selected.title}</span>
                 </p>
                 <p className="mt-2 flex justify-between">
                   <span className="text-ink-soft">Date:</span>
@@ -225,7 +268,7 @@ export function CheckAvailabilityModal({
                 </p>
               </div>
               <div className="mt-6 flex flex-col gap-3">
-                <Button onClick={handleViewTour} className="w-full">
+                <Button onClick={handleViewProduct} className="w-full">
                   View Tour &amp; Book
                 </Button>
                 <Button variant="secondary" onClick={back} className="w-full">

@@ -70,15 +70,17 @@ export function BookingPanel({
         </div>
       </div>
 
-      <BookingModal
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        productId={Number(bokunExperienceId)}
-        title={tourName}
-        pricingCategories={[]}
-        startTimes={[]}
-        currency={siteConfig.bokunDefaultCurrency ?? "USD"}
-      />
+      {showModal && (
+        <BookingModal
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          productId={Number(bokunExperienceId)}
+          title={tourName}
+          pricingCategories={[]}
+          startTimes={[]}
+          currency={siteConfig.bokunDefaultCurrency ?? "USD"}
+        />
+      )}
     </>
   );
 }

@@ -9,6 +9,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppButton";
 import { StructuredData } from "@/components/StructuredData";
+import { CartProvider } from "@/lib/cart-context";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -68,8 +69,10 @@ export default function RootLayout({
         {bokunConfigured && <Script src={bokunLoader} strategy="afterInteractive" />}
 
         <StructuredData />
-        <Header />
-        <main className="flex-1">{children}</main>
+        <CartProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+        </CartProvider>
         <Footer />
         <BottomNav />
         <WhatsAppFab />
