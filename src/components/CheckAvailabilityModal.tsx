@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Pi } from "@/components/Pi";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
-type Step = "tour" | "dates" | "guests" | "done";
+type PricingCat = { id: number; title: string; price: number; ticketCategory?: string; defaultCategory?: boolean };
+type Step = "tour" | "dates" | "pricing" | "done";
 
 type Product = {
   id: number;
@@ -31,8 +32,12 @@ export function CheckAvailabilityModal({
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [date, setDate] = useState("");
-  const [guests, setGuests] = useState("2");
   const [availError, setAvailError] = useState("");
+  const [availData, setAvailData] = useState<any[]>([]);
+  const [categoryPrices, setCategoryPrices] = useState<Record<number, number>>({});
+  const [pricingCategories, setPricingCategories] = useState<PricingCat[]>([]);
+  const [participants, setParticipants] = useState<Record<number, number>>({});
+  const [loadingAvail, setLoadingAvail] = useState(false);
 
   useEffect(() => { if (!open) setAvailError(""); }, [open]);
 
@@ -80,16 +85,67 @@ export function CheckAvailabilityModal({
     return () => document.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
+  const fetchAvailAndPricing = useCallback(async (productId: number, dt: string) => {
+    setLoadingAvail(true);
+    setAvailError("");
+    setParticipants({});
+    setCategoryPrices({});
+    setPricingCategories([]);
+    try {
+      const [availRes, productRes] = await Promise.all([
+        fetch(`/api/bokun/activity.json/${productId}/availabilities?start=${dt}&end=${dt}&currency=USD`),
+        fetch(`/api/bokun/activity.json/${productId}`),
+      ]);
+      if (!availRes.ok) throw new Error(`Availability fetch failed: ${availRes.status}`);
+      if (!productRes.ok) throw new Error(`Product fetch failed: ${productRes.status}`);
+      const availJson = await availRes.json();
+      const productJson = await productRes.json();
+      const slots: any[] = Array.isArray(availJson) ? availJson : [];
+      setAvailData(slots);
+      if (productJson.pricingCategories) {
+        const prices: Record<number, number> = {};
+        for (const s of slots) {
+          for (const rate of s.pricesByRate ?? []) {
+            for (const pu of rate.pricePerCategoryUnit ?? []) {
+              if (pu.amount?.amount && !prices[pu.id]) prices[pu.id] = pu.amount.amount;
+            }
+          }
+        }
+        const cats: PricingCat[] = productJson.pricingCategories.map((pc: any) => ({
+          id: pc.id,
+          title: pc.title,
+          price: prices[pc.id] ?? 0,
+          ticketCategory: pc.ticketCategory,
+          defaultCategory: pc.defaultCategory,
+        }));
+        setCategoryPrices(prices);
+        setPricingCategories(cats);
+        const init: Record<number, number> = {};
+        for (const pc of cats) {
+          init[pc.id] = pc.ticketCategory === "ADULT" || pc.defaultCategory ? 1 : 0;
+        }
+        setParticipants(init);
+      }
+    } catch (err) {
+      setAvailError(err instanceof Error ? err.message : "Failed to load pricing");
+    } finally {
+      setLoadingAvail(false);
+    }
+  }, []);
+
   const next = () => {
     if (step === "tour") setStep("dates");
-    else if (step === "dates") setStep("guests");
-    else if (step === "guests") setStep("done");
+    else if (step === "dates") {
+      if (selectedId && date) fetchAvailAndPricing(selectedId, date);
+      setStep("pricing");
+    }
+    else if (step === "pricing") setStep("done");
   };
 
   const back = () => {
     if (step === "dates") setStep("tour");
-    else if (step === "guests") setStep("dates");
-    else if (step === "done") setStep("guests");
+    else if (step === "pricing") setStep("dates");
+    else if (step === "done") setStep("pricing");
   };
 
   const handleViewProduct = () => {
@@ -98,6 +154,9 @@ export function CheckAvailabilityModal({
       router.push(`/product/${selectedId}`);
     }
   };
+
+  const totalTravelers = Object.values(participants).reduce((s, v) => s + v, 0);
+  const totalPrice = pricingCategories.reduce((t, pc) => t + (participants[pc.id] ?? 0) * (categoryPrices[pc.id] ?? pc.price), 0);
 
   if (!open) return null;
 
@@ -139,21 +198,22 @@ export function CheckAvailabilityModal({
 
         {/* Step indicator */}
         <div className="mt-5 flex items-center gap-2">
-          {(["tour", "dates", "guests"] as Step[]).map((s, i) => (
-            <div key={s} className="flex items-center gap-2">
-              <div
-                className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold transition-colors",
-                  step === s || (["dates", "guests"].includes(step) && ["dates", "guests"].includes(s))
-                    ? "bg-gold text-neutral-900"
-                    : "bg-muted text-ink-soft",
-                )}
-              >
-                {i + 1}
+          {(["tour", "dates", "pricing"] as const).map((label, i) => {
+            const completed = step === "dates" ? i < 1 : step === "pricing" ? i < 2 : step === "done" ? true : false;
+            return (
+              <div key={label} className="flex items-center gap-2">
+                <div
+                  className={cn(
+                    "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold transition-colors",
+                    completed || step === label ? "bg-gold text-neutral-900" : "bg-muted text-ink-soft",
+                  )}
+                >
+                  {completed ? <Pi name="pi-check" className="text-[10px]" /> : i + 1}
+                </div>
+                {i < 2 && <div className={cn("h-px w-6", completed ? "bg-gold" : "bg-line")} />}
               </div>
-              {i < 2 && <div className={cn("h-px w-6", step !== "tour" ? "bg-gold" : "bg-line")} />}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Step content */}
@@ -235,26 +295,78 @@ export function CheckAvailabilityModal({
             </div>
           )}
 
-          {/* Step 3: Guests */}
-          {step === "guests" && (
+          {/* Step 3: Pricing & Guests */}
+          {step === "pricing" && (
             <div>
-              <p className="text-sm text-ink-soft">How many guests?</p>
-              <div className="mt-3">
-                <label className="block text-xs font-medium text-foreground mb-1.5">Number of guests</label>
-                <input
-                  type="number"
-                  min={1}
-                  max={20}
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="w-full rounded-xl border border-line bg-cream px-4 py-3 text-sm text-foreground outline-none focus:border-gold focus:ring-2 focus:ring-gold/30"
-                />
-              </div>
+              <p className="text-sm text-ink-soft">
+                {selected?.title} — {date ? new Date(date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : ""}
+              </p>
+
+              {loadingAvail ? (
+                <p className="mt-4 text-sm text-ink-soft animate-pulse">Loading pricing &amp; availability...</p>
+              ) : availError ? (
+                <p className="mt-4 text-sm text-red-600">Error: {availError}</p>
+              ) : pricingCategories.length === 0 ? (
+                <p className="mt-4 text-sm text-ink-soft">No pricing information available for this date.</p>
+              ) : (
+                <>
+                  {/* Availability summary */}
+                  {availData.length > 0 && (
+                    <div className="mt-4 rounded-xl bg-muted p-3 text-sm">
+                      {(() => {
+                        const totalAvail = availData.reduce((sum, a) => sum + (a.availabilityCount ?? 0), 0);
+                        const soldOut = availData.every((a) => a.soldOut);
+                        return soldOut ? (
+                          <p className="text-red-600">Sold out for this date.</p>
+                        ) : (
+                          <p className="text-ink-soft">{totalAvail} {totalAvail === 1 ? "seat" : "seats"} available</p>
+                        );
+                      })()}
+                    </div>
+                  )}
+
+                  {/* Pricing categories */}
+                  <div className="mt-4 space-y-3">
+                    {pricingCategories.map((pc) => (
+                      <div key={pc.id} className="flex items-center justify-between rounded-xl border border-line p-3">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-foreground">{pc.title}</p>
+                          <p className="text-xs text-ink-soft">{categoryPrices[pc.id] ?? pc.price} USD</p>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0 ml-3">
+                          <button type="button"
+                            onClick={() => setParticipants((p) => ({ ...p, [pc.id]: Math.max(0, (p[pc.id] ?? 0) - 1) }))}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-line text-foreground hover:bg-muted transition-colors">
+                            <Pi name="pi-minus" className="text-xs" />
+                          </button>
+                          <span className="w-6 text-center font-semibold text-foreground">{participants[pc.id] ?? 0}</span>
+                          <button type="button"
+                            onClick={() => setParticipants((p) => ({ ...p, [pc.id]: (p[pc.id] ?? 0) + 1 }))}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-line text-foreground hover:bg-muted transition-colors">
+                            <Pi name="pi-plus" className="text-xs" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Total */}
+                  {totalTravelers > 0 && (
+                    <div className="mt-4 flex items-center justify-between rounded-xl bg-muted p-3">
+                      <span className="text-sm font-medium text-foreground">Total ({totalTravelers} {totalTravelers === 1 ? "person" : "people"})</span>
+                      <span className="text-lg font-semibold text-gold-dark">{totalPrice} USD</span>
+                    </div>
+                  )}
+                </>
+              )}
+
               <div className="mt-5 flex justify-between">
                 <Button variant="ghost" onClick={back}>
                   <Pi name="pi-arrow-left" className="text-sm" /> Back
                 </Button>
-                <Button onClick={next}>Check Availability</Button>
+                <Button onClick={next} disabled={totalTravelers === 0}>
+                  Continue <Pi name="pi-arrow-right" className="text-sm" />
+                </Button>
               </div>
             </div>
           )}
@@ -265,7 +377,7 @@ export function CheckAvailabilityModal({
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold/10">
                 <Pi name="pi-check-circle" className="text-3xl text-gold-dark" />
               </div>
-              <h3 className="mt-4 text-xl text-foreground">Ready to check!</h3>
+              <h3 className="mt-4 text-xl text-foreground">Availability confirmed!</h3>
               <div className="mt-4 rounded-xl bg-muted p-4 text-left text-sm">
                 <p className="flex justify-between">
                   <span className="text-ink-soft">Tour:</span>
@@ -275,9 +387,17 @@ export function CheckAvailabilityModal({
                   <span className="text-ink-soft">Date:</span>
                   <span className="font-medium text-foreground">{date ? new Date(date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "Flexible"}</span>
                 </p>
-                <p className="mt-2 flex justify-between">
-                  <span className="text-ink-soft">Guests:</span>
-                  <span className="font-medium text-foreground">{guests}</span>
+                <div className="mt-3 border-t border-line pt-3 space-y-1.5">
+                  {pricingCategories.filter((pc) => (participants[pc.id] ?? 0) > 0).map((pc) => (
+                    <p key={pc.id} className="flex justify-between text-sm">
+                      <span className="text-ink-soft">{pc.title} × {participants[pc.id]}</span>
+                      <span className="text-foreground font-medium">{(categoryPrices[pc.id] ?? pc.price) * (participants[pc.id] ?? 0)} USD</span>
+                    </p>
+                  ))}
+                </div>
+                <p className="mt-3 flex justify-between border-t border-line pt-3 text-base font-semibold">
+                  <span className="text-foreground">Total</span>
+                  <span className="text-gold-dark">{totalPrice} USD</span>
                 </p>
               </div>
               <div className="mt-6 flex flex-col gap-3">
