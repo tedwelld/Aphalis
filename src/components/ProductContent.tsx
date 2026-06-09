@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Pi } from "@/components/Pi";
 import { Section } from "@/components/ui/Section";
@@ -101,7 +101,8 @@ export function ProductContent({
 }: Props) {
   const [tab, setTab] = useState<TabId>("about");
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const [shareUrl, setShareUrl] = useState("");
+  useEffect(() => setShareUrl(window.location.href), []);
   const shareText = `Check out ${title} on ${siteConfig.name}`;
 
   const sections: { id: TabId; content: React.ReactNode }[] = [
