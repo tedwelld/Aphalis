@@ -15,7 +15,7 @@ export default function BlogPage() {
       <PageHeader
         title="Safari Journal"
         subtitle="Stories, tips and inspiration from the field."
-        image="/images/nightsighting.jpeg"
+        image="/images/demo/forest-stream.jpg"
       />
       <Section>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
