@@ -18,7 +18,7 @@ export default function ContactPage() {
       <PageHeader
         title="Plan Your Safari"
         subtitle="Send an enquiry below, chat with us on WhatsApp, or email us directly — whatever suits you."
-        image="/images/nighttime.jpeg"
+        image="/images/demo/tent-camp.jpg"
       />
       <Section>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
