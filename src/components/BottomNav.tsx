@@ -23,7 +23,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-4 bottom-4 z-40 rounded-2xl border border-line/50 bg-surface/90 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-4 bottom-4 z-40 rounded-2xl border border-line/50 bg-surface/95 px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl dark:bg-[#1a1814]/95 lg:hidden"
     >
       <div className="mx-auto grid max-w-md grid-cols-6 gap-1">
         {items.map((item) => {
