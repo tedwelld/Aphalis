@@ -115,6 +115,15 @@ h1, h2, h3, h4 {
   animation: bob 1.8s ease-in-out infinite;
 }
 
+/* Slideshow progress bar */
+@keyframes growX {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.animate-grow-x {
+  animation: growX 4s linear forwards;
+}
+
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

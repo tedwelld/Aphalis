@@ -14,11 +14,13 @@ export function Photo({
   alt,
   className,
   imgClassName,
+  onLoad,
 }: {
   src: string;
   alt: string;
   className?: string;
   imgClassName?: string;
+  onLoad?: () => void;
 }) {
   const [failed, setFailed] = useState(false);
   const hasPositionClass = /\b(absolute|fixed|sticky|relative)\b/.test(className ?? "");
@@ -38,6 +40,7 @@ export function Photo({
           alt={alt}
           loading="lazy"
           onError={() => setFailed(true)}
+          onLoad={onLoad}
           className={cn("h-full w-full object-cover", imgClassName)}
         />
       )}

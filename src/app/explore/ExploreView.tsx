@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Pi } from "@/components/Pi";
 import { Section } from "@/components/ui/Section";
+import { SectionHeading } from "@/components/ui/Section";
 import { DestinationCard, TourCard } from "@/components/cards";
 import { Icon } from "@/components/Icon";
 import { Photo } from "@/components/Photo";
@@ -18,6 +19,12 @@ export type ExploreTab = "destinations" | "activities" | "tours";
 
 const tabs: { key: ExploreTab; label: string; icon: string; blurb: string }[] = [
   {
+    key: "tours",
+    label: "Tours",
+    icon: "pi-ticket",
+    blurb: "Hand-crafted itineraries you can book online, on WhatsApp, or by email.",
+  },
+  {
     key: "destinations",
     label: "Destinations",
     icon: "pi-map-marker",
@@ -29,22 +36,23 @@ const tabs: { key: ExploreTab; label: string; icon: string; blurb: string }[] = 
     icon: "pi-compass",
     blurb: "Every way to experience the wild — choose the adventures that move you.",
   },
-  {
-    key: "tours",
-    label: "Tours",
-    icon: "pi-ticket",
-    blurb: "Hand-crafted itineraries you can book online, on WhatsApp, or by email.",
-  },
 ];
 
-/**
- * Combined Destinations / Activities / Tours view. A dropdown wraps the three
- * former pages — selecting an option swaps the section shown below.
- */
+const allCategories = ["All", ...new Set(tours.map((t) => t.category))] as const;
+const allDestinations = ["All", ...new Set(tours.map((t) => t.destinationSlug))] as const;
+
+type SortKey = "popular" | "name" | "duration";
+
 export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
   const [tab, setTab] = useState<ExploreTab>(initialTab);
   const [open, setOpen] = useState(false);
   const [stats, setStats] = useState<Map<number, ProductStat>>(new Map());
+
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [destFilter, setDestFilter] = useState("All");
+  const [sortBy, setSortBy] = useState<SortKey>("popular");
+
   const current = tabs.find((t) => t.key === tab)!;
 
   useEffect(() => {
@@ -58,9 +66,45 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
       .catch(() => {});
   }, []);
 
+  const filteredTours = useMemo(() => {
+    let result = [...tours];
+
+    if (search) {
+      const q = search.toLowerCase();
+      result = result.filter((t) => t.name.toLowerCase().includes(q) || t.summary.toLowerCase().includes(q) || t.description.toLowerCase().includes(q));
+    }
+    if (categoryFilter !== "All") {
+      result = result.filter((t) => t.category === categoryFilter);
+    }
+    if (destFilter !== "All") {
+      result = result.filter((t) => t.destinationSlug === destFilter);
+    }
+
+    result.sort((a, b) => {
+      if (sortBy === "popular") {
+        const aCount = a.bokunProductId ? (stats.get(a.bokunProductId)?.reviewCount ?? a.bookingCount ?? 0) : (a.bookingCount ?? 0);
+        const bCount = b.bokunProductId ? (stats.get(b.bokunProductId)?.reviewCount ?? b.bookingCount ?? 0) : (b.bookingCount ?? 0);
+        return bCount - aCount;
+      }
+      if (sortBy === "name") return a.name.localeCompare(b.name);
+      if (sortBy === "duration") return a.durationDays - b.durationDays;
+      return 0;
+    });
+
+    return result;
+  }, [search, categoryFilter, destFilter, sortBy, stats]);
+
+  const activeFilters = (categoryFilter !== "All" ? 1 : 0) + (destFilter !== "All" ? 1 : 0) + (search ? 1 : 0);
+
+  const clearFilters = () => {
+    setSearch("");
+    setCategoryFilter("All");
+    setDestFilter("All");
+  };
+
   return (
     <Section>
-      {/* Dropdown selector */}
+      {/* Tab selector */}
       <div className="mb-12 flex flex-col items-center text-center">
         <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-gold-dark">Explore</p>
 
@@ -79,7 +123,6 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
 
           {open && (
             <>
-              {/* click-away backdrop */}
               <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} aria-hidden="true" />
               <ul
                 role="listbox"
@@ -113,7 +156,139 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
         <span className="gold-rule mt-5" />
       </div>
 
-      {/* Sections */}
+      {/* Tours — with enterprise filtering */}
+      {tab === "tours" && (
+        <div className="space-y-8">
+          {/* Search + sort bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="relative flex-1 max-w-sm">
+              <Pi name="pi-search" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-ink-soft" />
+              <input
+                type="text"
+                placeholder="Search tours by name or description..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full rounded-full border border-line bg-surface py-2.5 pl-9 pr-4 text-sm text-foreground placeholder:text-ink-soft/60 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+              />
+              {search && (
+                <button type="button" onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-soft hover:text-foreground">
+                  <Pi name="pi-times-circle" className="text-sm" />
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="hidden text-xs text-ink-soft sm:inline">Sort by</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortKey)}
+                className="rounded-full border border-line bg-surface px-4 py-2.5 text-sm text-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+              >
+                <option value="popular">Most Popular</option>
+                <option value="name">Name A–Z</option>
+                <option value="duration">Duration (shortest)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Category chips */}
+          <div className="flex flex-wrap gap-2">
+            {allCategories.map((cat) => {
+              const count = cat === "All" ? tours.length : tours.filter((t) => t.category === cat).length;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setCategoryFilter(cat === "All" ? "All" : cat)}
+                  className={cn(
+                    "rounded-full px-4 py-2 text-xs font-medium transition-all sm:text-sm",
+                    categoryFilter === cat
+                      ? "bg-gold text-neutral-900 shadow-sm"
+                      : "bg-muted text-ink-soft hover:bg-gold/20 hover:text-foreground",
+                  )}
+                >
+                  {cat}
+                  <span className="ml-1 opacity-60">({count})</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Destination filter + active filter info */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs text-ink-soft">Destination</span>
+              <div className="flex flex-wrap gap-1.5">
+                {allDestinations.map((d) => {
+                  const count = d === "All" ? tours.length : tours.filter((t) => t.destinationSlug === d).length;
+                  return (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => setDestFilter(d === "All" ? "All" : d)}
+                      className={cn(
+                        "rounded-full px-3 py-1.5 text-xs font-medium transition-all",
+                        destFilter === d
+                          ? "bg-gold/20 text-gold-dark border border-gold/30"
+                          : "text-ink-soft border border-transparent hover:border-line",
+                      )}
+                    >
+                      {d.charAt(0).toUpperCase() + d.slice(1)} ({count})
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            {activeFilters > 0 && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="flex items-center gap-1 text-xs text-gold-dark hover:underline"
+              >
+                <Pi name="pi-filter-slash" className="text-xs" />
+                Clear all ({activeFilters})
+              </button>
+            )}
+          </div>
+
+          {/* Tour cards */}
+          {filteredTours.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-16 text-center">
+              <Pi name="pi-ticket" className="text-4xl text-ink-soft/40" />
+              <p className="text-ink-soft">No tours match your filters.</p>
+              <button type="button" onClick={clearFilters} className="text-sm font-medium text-gold-dark hover:underline">
+                Reset all filters
+              </button>
+            </div>
+          ) : (
+            <>
+              <p className="text-sm text-ink-soft">
+                Showing {filteredTours.length} {filteredTours.length === 1 ? "tour" : "tours"}
+                {activeFilters > 0 && <> with {activeFilters} {activeFilters === 1 ? "filter" : "filters"} active</>}
+              </p>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filteredTours.map((t) => (
+                  <TourCard key={t.slug} tour={t} />
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Bokun widget */}
+          <div className="rounded-2xl bg-muted p-6 sm:p-10">
+            <SectionHeading
+              align="left"
+              eyebrow="Book Online"
+              title="Real-Time Availability & Booking"
+              description="Check live availability and secure your spot through our trusted booking partner."
+            />
+            <div className="mt-6">
+              <BokunWidget type="list" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Destinations */}
       {tab === "destinations" && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {destinations.map((d) => (
@@ -122,6 +297,7 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
         </div>
       )}
 
+      {/* Activities */}
       {tab === "activities" && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {activities.map((a) => (
@@ -145,29 +321,6 @@ export function ExploreView({ initialTab }: { initialTab: ExploreTab }) {
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {tab === "tours" && (
-        <div className="space-y-12">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[...tours]
-              .sort((a, b) => {
-                const aCount = a.bokunProductId ? (stats.get(a.bokunProductId)?.reviewCount ?? a.bookingCount ?? 0) : (a.bookingCount ?? 0);
-                const bCount = b.bokunProductId ? (stats.get(b.bokunProductId)?.reviewCount ?? b.bookingCount ?? 0) : (b.bookingCount ?? 0);
-                return bCount - aCount;
-              })
-              .map((t) => (
-              <TourCard key={t.slug} tour={t} />
-            ))}
-          </div>
-          <div className="rounded-2xl bg-muted p-6 sm:p-10">
-            <h3 className="text-center text-2xl text-foreground">Book Online Instantly</h3>
-            <p className="mx-auto mt-2 mb-6 max-w-xl text-center text-ink-soft">
-              Check real-time availability and secure your spot through our trusted booking partner.
-            </p>
-            <BokunWidget type="list" />
-          </div>
         </div>
       )}
     </Section>

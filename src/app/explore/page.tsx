@@ -6,7 +6,7 @@ import { ExploreView, type ExploreTab } from "./ExploreView";
 export const metadata: Metadata = {
   title: "Explore Safaris",
   description:
-    "Browse our safari destinations, activities and tours across Zimbabwe, Botswana, Namibia and Zambia — all in one place. Book online, on WhatsApp, or by email.",
+    "Browse our safari tours, destinations and activities across Zimbabwe, Botswana, Namibia and Zambia — all in one place. Book online, on WhatsApp, or by email.",
 };
 
 const valid: ExploreTab[] = ["destinations", "activities", "tours"];
@@ -20,14 +20,14 @@ export default async function ExplorePage({
   const { view } = await searchParams;
   const initialTab: ExploreTab = valid.includes(view as ExploreTab)
     ? (view as ExploreTab)
-    : "destinations";
+    : "tours";
 
   return (
     <>
       <PageHeader
         title="Explore Our Safaris"
-        subtitle="Destinations, activities and tours — all in one place. Pick a view to begin."
-        image="/images/driving.jpeg"
+        subtitle="Tours, destinations and activities — find your perfect African adventure."
+        image="/images/demo/lion-walking.jpg"
       />
       {/* key remounts the view when the ?view= query changes so the right tab shows */}
       <ExploreView key={initialTab} initialTab={initialTab} />

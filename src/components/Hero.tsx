@@ -15,8 +15,8 @@ export function Hero() {
     <>
       <section className="relative isolate min-h-[calc(95svh-5rem)] overflow-hidden">
         <Photo
-          src="/images/hero.jpeg"
-          alt="African elephants at sunset on the savannah"
+          src="/images/demo/lion-walking.jpg"
+          alt="Lion walking through the African savannah at golden hour"
           className="absolute inset-0 h-full w-full"
           imgClassName="animate-kenburns"
         />
