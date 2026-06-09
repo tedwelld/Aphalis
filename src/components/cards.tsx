@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Pi } from "@/components/Pi";
 import { Card } from "@/components/ui/Card";
 import { Photo } from "@/components/Photo";
+import { WishlistButton } from "@/components/WishlistButton";
 import type { Destination } from "@/content/destinations";
 import type { Tour } from "@/content/tours";
 import type { BlogPost } from "@/content/blog";
@@ -44,71 +45,66 @@ export function TourCard({ tour }: { tour: Tour }) {
   const href = tour.bokunProductId ? `/product/${tour.bokunProductId}` : `/tours/${tour.slug}`;
   const durationLabel = tour.durationDays > 0 ? `${tour.durationDays} days` : "1 hour";
   const isBestSeller = (tour.bookingCount ?? 0) >= 100;
-  const isPopular = (tour.bookingCount ?? 0) >= 50 && (tour.bookingCount ?? 0) < 100;
   const hasPrice = tour.priceFrom && !tour.priceFrom.startsWith("$ on");
   return (
-    <article className="group rounded-2xl border border-line bg-surface shadow-sm overflow-hidden transition-all hover:shadow-xl hover:-translate-y-0.5">
-      <div className="relative overflow-hidden">
-        <Link href={href} className="block aspect-[16/11]">
-          <Photo
-            src={tour.image}
-            alt={tour.name}
-            className="absolute inset-0 h-full w-full"
-            imgClassName="transition-transform duration-500 group-hover:scale-105"
-          />
-        </Link>
-        {/* Top badges row */}
-        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-          <span className="rounded-full bg-gold/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur-sm">
-            {tour.category}
-          </span>
+    <article className="group cursor-pointer">
+      <Link href={href} className="block">
+        <div className="relative overflow-hidden rounded-2xl">
+          <div className="aspect-[4/3]">
+            <Photo
+              src={tour.image}
+              alt={tour.name}
+              className="absolute inset-0 h-full w-full"
+              imgClassName="transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          {/* Category badge */}
+          {tour.category && (
+            <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-neutral-800 shadow-sm backdrop-blur-sm">
+              {tour.category}
+            </span>
+          )}
+          {/* Best Seller badge */}
           {isBestSeller && (
-            <span className="rounded-full bg-rose-600/90 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-sm">
+            <span className="absolute left-3 top-12 rounded-full bg-rose-600/90 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-sm">
               Best Seller
             </span>
           )}
-          {isPopular && !isBestSeller && (
-            <span className="rounded-full bg-amber-600/90 px-3 py-1 text-xs font-semibold text-white shadow-sm backdrop-blur-sm">
-              Popular
-            </span>
+          {/* Rating */}
+          <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-neutral-800 shadow-sm backdrop-blur-sm">
+            <Pi name="pi-star-fill" className="text-[10px]" />
+            <span>{tour.bookingCount ? "4.8" : "—"}</span>
+          </div>
+          {/* Heart icon */}
+          <div className="absolute right-3 top-3">
+            <WishlistButton />
+          </div>
+        </div>
+      </Link>
+      <div className="mt-2 px-0.5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <Link href={href}>
+              <h3 className="text-sm font-medium text-foreground line-clamp-1 hover:underline">{tour.name}</h3>
+            </Link>
+            <p className="mt-0.5 text-sm text-ink-soft line-clamp-1">
+              {durationLabel}
+              {tour.destinationSlug && <> &middot; {capitalize(tour.destinationSlug)}</>}
+            </p>
+          </div>
+          {tour.bookingCount && (
+            <p className="shrink-0 text-xs text-ink-soft">{tour.bookingCount} reviews</p>
           )}
         </div>
-        {/* Rating badge */}
-        <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs text-white backdrop-blur-sm">
-          <Pi name="pi-star-fill" className="text-[10px] text-gold-light" />
-          <span className="font-medium">{tour.bookingCount ? "4.8" : "—"}</span>
-          <span className="opacity-70">({tour.bookingCount ?? "0"})</span>
-        </div>
-        {/* Wishlist / save icon (decorative — no handler to keep TourCard server-safe) */}
-        <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-white opacity-0 transition-opacity group-hover:opacity-100 backdrop-blur-sm">
-          <Pi name="pi-heart" className="text-sm" />
-        </span>
-      </div>
-      <div className="p-4">
-        <div className="flex items-center gap-2 text-xs text-ink-soft">
-          <span className="flex items-center gap-1"><Pi name="pi-clock" className="text-gold-dark" />{durationLabel}</span>
-          <span className="text-line">·</span>
-          <span>{tour.destinationSlug ? capitalize(tour.destinationSlug) : tour.category}</span>
-        </div>
-        <Link href={href}>
-          <h3 className="mt-1.5 font-medium text-foreground hover:text-gold-dark transition-colors line-clamp-1">{tour.name}</h3>
-        </Link>
-        {tour.summary && <p className="mt-1 text-sm text-ink-soft line-clamp-2">{tour.summary}</p>}
-        <div className="mt-4 flex items-center justify-between">
-          <div>
-            {hasPrice ? (
-              <p className="text-lg font-semibold text-foreground">{tour.priceFrom} <span className="text-xs font-normal text-ink-soft">/ person</span></p>
-            ) : (
-              <p className="text-sm font-medium text-gold-dark">Price on request</p>
-            )}
-          </div>
-          <Link
-            href={href}
-            className="inline-flex items-center gap-1.5 rounded-full bg-gold px-5 py-2 text-xs font-semibold text-neutral-900 transition-all hover:bg-gold-dark hover:text-white hover:shadow-md active:scale-95"
-          >
-            {hasPrice ? "Book Now" : "Enquire"}
-            <Pi name="pi-arrow-right" className="text-xs" />
-          </Link>
+        <div className="mt-1.5 flex items-baseline gap-1">
+          {hasPrice ? (
+            <>
+              <span className="text-sm font-semibold text-foreground">{tour.priceFrom}</span>
+              <span className="text-sm text-ink-soft">/ person</span>
+            </>
+          ) : (
+            <span className="text-sm text-ink-soft">Price on request</span>
+          )}
         </div>
       </div>
     </article>
