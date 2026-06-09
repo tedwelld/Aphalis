@@ -64,7 +64,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex min-h-full flex-col bg-cream pb-20 text-foreground lg:pb-0">
+      <body className="flex min-h-full flex-col bg-cream pb-16 text-foreground lg:pb-0">
         {/* Bokun loader — injected once; scans the page for .bokunWidget elements
             and renders the booking iframe + site-wide floating cart. */}
         {bokunConfigured && <Script src={bokunLoader} strategy="afterInteractive" />}
