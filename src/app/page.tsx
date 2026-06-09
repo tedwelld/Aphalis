@@ -7,6 +7,8 @@ import { CtaBand } from "@/components/CtaBand";
 import { Icon } from "@/components/Icon";
 import { Photo } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
+import { StatsBar } from "@/components/StatsBar";
+import { TrustBadges } from "@/components/TrustBadges";
 import { DestinationCard, TestimonialCard, BlogCard } from "@/components/cards";
 import { FeaturedListings } from "@/components/FeaturedListings";
 import { destinations } from "@/content/destinations";
@@ -18,6 +20,10 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+
+      <StatsBar />
+
+      <TrustBadges />
 
       {/* Destinations */}
       <Section>

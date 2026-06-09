@@ -2,6 +2,7 @@ import { Pi } from "@/components/Pi";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 /** Final call-to-action band offering all three booking channels. */
 export function CtaBand({
@@ -23,6 +24,9 @@ export function CtaBand({
           <ButtonLink href="/contact" variant="secondary">
             <Pi name="pi-envelope" className="text-base" /> Email enquiry
           </ButtonLink>
+        </div>
+        <div className="mt-10 border-t border-line/40 pt-8">
+          <NewsletterSignup variant="cta" className="mx-auto max-w-md" />
         </div>
       </Container>
     </section>

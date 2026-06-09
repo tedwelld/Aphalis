@@ -4,6 +4,7 @@ import { Logo } from "@/components/Logo";
 import { siteConfig } from "@/lib/siteConfig";
 import { Container } from "@/components/ui/Container";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 export function Footer() {
   return (
@@ -55,10 +56,13 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">Ready to go?</h4>
-          <p className="mt-4 text-sm text-ink-soft">Book online, on WhatsApp, or by email — we reply fast.</p>
-          <div className="mt-4">
-            <WhatsAppButton size="sm" />
+          <NewsletterSignup />
+          <div className="mt-6">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-foreground">Ready to go?</h4>
+            <p className="mt-2 text-sm text-ink-soft">We reply fast.</p>
+            <div className="mt-3">
+              <WhatsAppButton size="sm" />
+            </div>
           </div>
         </div>
       </Container>
