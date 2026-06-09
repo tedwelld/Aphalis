@@ -5,7 +5,7 @@ export function Logo({ className }: { className?: string }) {
     <img
       src="/indlulamitihilogo.png"
       alt="Indlulamithi Safaris & Tours"
-      className={cn("h-auto w-auto object-contain", className)}
+      className={cn("object-contain", className)}
     />
   );
 }
