@@ -52,6 +52,7 @@ export default function RootLayout({
     <html
       lang={siteConfig.locale}
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <head>
         {/* Runs before paint: marks JS-enabled (so scroll-reveal elements only
