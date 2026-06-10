@@ -77,6 +77,19 @@ h1, h2, h3, h4 {
   width: 100%;
 }
 
+/* Hide Bokun's injected persistent shopping cart. The Bokun loader renders a
+   minicart pinned to the bottom of the viewport (a white bar that ignores our
+   dark theme and sits behind the mobile bottom nav). The site has its own cart
+   (CartProvider + header), so this one is redundant. Kept in the DOM via
+   display:none so the in-page booking widgets (.bokunWidget) and the checkout
+   modal still work; only the floating cart is hidden. */
+#bokun-widgets-cart,
+#bokun-widgets-cart-wrapper,
+.bokun-widgets-cart,
+.bokun-widgets-cart-wrapper {
+  display: none !important;
+}
+
 /* ---------------------------------------------------------------------------
    Motion — inspired by immersive safari sites (full-bleed imagery + subtle,
    elegant animation rather than flashy effects).
