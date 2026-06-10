@@ -94,14 +94,23 @@ export async function getProductsSitemapEntries(): Promise<MetadataRoute.Sitemap
     );
   } catch {
     // Fall back to locally mapped tour experience IDs when Bokun is unavailable at build time.
+    const seen = new Set<string>();
+
     return tours
       .filter((tour) => tour.bokunExperienceId)
-      .map((tour) =>
-        entry(`/product/${tour.bokunExperienceId}`, {
-          changeFrequency: "weekly",
-          priority: 0.85,
-        }),
-      );
+      .reduce<MetadataRoute.Sitemap>((entries, tour) => {
+        const url = `${getSiteUrl()}/product/${tour.bokunExperienceId}`;
+        if (seen.has(url)) return entries;
+
+        seen.add(url);
+        entries.push(
+          entry(`/product/${tour.bokunExperienceId}`, {
+            changeFrequency: "weekly",
+            priority: 0.85,
+          }),
+        );
+        return entries;
+      }, []);
   }
 }
 
@@ -114,5 +123,12 @@ export async function getAllSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     getProductsSitemapEntries(),
   ]);
 
-  return [...pages, ...destinations, ...tours, ...blog, ...products];
+  const entries = [...pages, ...destinations, ...tours, ...blog, ...products];
+  const seen = new Set<string>();
+
+  return entries.filter((item) => {
+    if (seen.has(item.url)) return false;
+    seen.add(item.url);
+    return true;
+  });
 }
