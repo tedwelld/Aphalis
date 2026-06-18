@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { bookingSchema } from "@/lib/bookingSchema";
 import { internalLeadEmail, guestConfirmationEmail } from "@/emails/templates";
+import { generateBookingPdf } from "@/emails/booking-pdf";
+import { sendMail } from "@/lib/mail";
 
-/**
- * Email booking flow. Validates the enquiry, then sends TWO emails via Resend:
- *  1. Internal lead -> BOOKING_INBOX (replyTo = guest, so staff can reply directly)
- *  2. Branded auto-reply -> the guest
- *
- * Required env: RESEND_API_KEY, EMAIL_FROM, BOOKING_INBOX
- */
 export async function POST(request: Request) {
   let payload: unknown;
   try {
@@ -28,53 +22,55 @@ export async function POST(request: Request) {
 
   const data = parsed.data;
 
-  // Honeypot: if the hidden field is filled, silently accept (don't tip off bots).
   if (data.company) {
     return NextResponse.json({ ok: true });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  const inbox = process.env.BOOKING_INBOX;
-
-  if (!apiKey || !from || !inbox) {
-    console.error("Booking email not sent: missing RESEND_API_KEY / EMAIL_FROM / BOOKING_INBOX");
+  if (!process.env.SMTP_HOST) {
+    console.error("Booking email not sent: SMTP_HOST is not set in .env.local");
     return NextResponse.json(
-      { ok: false, error: "Booking email is not configured yet. Please use WhatsApp for now." },
+      { ok: false, error: "Email is not configured yet. Please use WhatsApp for now." },
       { status: 503 },
     );
   }
 
-  const resend = new Resend(apiKey);
+  const inbox = process.env.BOOKING_INBOX;
+  if (!inbox) {
+    console.error("Booking email not sent: BOOKING_INBOX is not set in .env.local");
+    return NextResponse.json(
+      { ok: false, error: "Email is not configured yet. Please use WhatsApp for now." },
+      { status: 503 },
+    );
+  }
+
   const lead = internalLeadEmail(data);
   const guest = guestConfirmationEmail(data);
 
+  const pdfBuffer = generateBookingPdf(data);
+
+  const pdfAttachment = {
+    filename: `booking-enquiry-${Date.now().toString(36)}.pdf`,
+    content: pdfBuffer,
+  };
+
   try {
-    const [leadRes, guestRes] = await Promise.all([
-      resend.emails.send({
-        from,
+    await Promise.all([
+      sendMail({
         to: inbox,
         replyTo: data.email,
         subject: lead.subject,
         html: lead.html,
         text: lead.text,
+        attachments: [pdfAttachment],
       }),
-      resend.emails.send({
-        from,
+      sendMail({
         to: data.email,
         subject: guest.subject,
         html: guest.html,
         text: guest.text,
+        attachments: [pdfAttachment],
       }),
     ]);
-
-    if (leadRes.error || guestRes.error) {
-      console.error("Resend error:", leadRes.error, guestRes.error);
-      return NextResponse.json(
-        { ok: false, error: "We couldn't send your enquiry. Please try WhatsApp or email us directly." },
-        { status: 502 },
-      );
-    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

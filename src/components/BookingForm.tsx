@@ -10,20 +10,42 @@ import { cn } from "@/lib/cn";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+function guestLabel(adults: number, children: number) {
+  const parts: string[] = [];
+  if (adults > 0) parts.push(`${adults} Adult${adults !== 1 ? "s" : ""}`);
+  if (children > 0) parts.push(`${children} Child${children !== 1 ? "ren" : ""}`);
+  return parts.join(", ") || "—";
+}
+
 /** Email booking flow form. Posts to /api/booking which emails ATSZ + auto-replies. */
 export function BookingForm({ tourName }: { tourName?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState<string | null>(null);
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
 
   const {
     register,
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<BookingInput>({
     defaultValues: { tour: tourName ?? "" },
   });
+
+  const updateGuests = (a: number, c: number) => {
+    setAdults(a);
+    setChildren(c);
+    setValue("guests", guestLabel(a, c));
+  };
+
+  const [dateValue, setDateValue] = useState("");
+  const updateDate = (v: string) => {
+    setDateValue(v);
+    setValue("dates", v);
+  };
 
   const onSubmit = async (values: BookingInput) => {
     // Client-side validation mirrors the server schema.
@@ -48,6 +70,9 @@ export function BookingForm({ tourName }: { tourName?: string }) {
         return;
       }
       setStatus("success");
+      setAdults(2);
+      setChildren(0);
+      setDateValue("");
       reset({ tour: tourName ?? "" });
     } catch {
       setStatus("error");
@@ -111,10 +136,40 @@ export function BookingForm({ tourName }: { tourName?: string }) {
           <input className={inputCls} placeholder="e.g. Okavango Delta Explorer" {...register("tour")} />
         </Field>
         <Field label="Preferred dates" error={errors.dates?.message}>
-          <input className={inputCls} placeholder="e.g. Aug 2026, flexible" {...register("dates")} />
+          <input
+            type="date"
+            className={inputCls}
+            value={dateValue}
+            onChange={(e) => updateDate(e.target.value)}
+          />
         </Field>
         <Field label="Guests" error={errors.guests?.message}>
-          <input className={inputCls} placeholder="2 adults, 1 child" {...register("guests")} />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between rounded-lg border border-line bg-cream px-3.5 py-2">
+              <span className="text-sm text-foreground">Adults</span>
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={() => updateGuests(Math.max(0, adults - 1), children)} className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-foreground hover:bg-muted transition-colors">
+                  <Pi name="pi-minus" className="text-xs" />
+                </button>
+                <span className="w-6 text-center text-sm font-medium text-foreground">{adults}</span>
+                <button type="button" onClick={() => updateGuests(adults + 1, children)} className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-foreground hover:bg-muted transition-colors">
+                  <Pi name="pi-plus" className="text-xs" />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center justify-between rounded-lg border border-line bg-cream px-3.5 py-2">
+              <span className="text-sm text-foreground">Children</span>
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={() => updateGuests(adults, Math.max(0, children - 1))} className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-foreground hover:bg-muted transition-colors">
+                  <Pi name="pi-minus" className="text-xs" />
+                </button>
+                <span className="w-6 text-center text-sm font-medium text-foreground">{children}</span>
+                <button type="button" onClick={() => updateGuests(adults, children + 1)} className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-foreground hover:bg-muted transition-colors">
+                  <Pi name="pi-plus" className="text-xs" />
+                </button>
+              </div>
+            </div>
+          </div>
         </Field>
       </div>
 
@@ -143,7 +198,7 @@ export function BookingForm({ tourName }: { tourName?: string }) {
         <WhatsAppButton
           variant="secondary"
           label="Book on WhatsApp instead"
-          details={{ tourName, name: watch("name"), dates: watch("dates"), guests: watch("guests") }}
+          details={{ tourName, name: watch("name"), dates: dateValue, guests: guestLabel(adults, children) }}
         />
       </div>
     </form>
