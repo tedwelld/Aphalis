@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
 import { bookingSchema } from "@/lib/bookingSchema";
 import { internalLeadEmail, guestConfirmationEmail } from "@/emails/templates";
-import { sendMail } from "@/lib/mail";
+import { createBookingRef, generateBookingPdf, makePdfAttachment } from "@/emails/booking-pdf";
+import { sendMail, type MailAttachment } from "@/lib/mail";
+
+function cloneAttachment(attachment: MailAttachment): MailAttachment {
+  return {
+    ...attachment,
+    content: Buffer.from(attachment.content),
+  };
+}
 
 export async function POST(request: Request) {
   let payload: unknown;
@@ -42,29 +50,42 @@ export async function POST(request: Request) {
     );
   }
 
-  const lead = internalLeadEmail(data);
-  const guest = guestConfirmationEmail(data);
+  const ref = createBookingRef();
+  let pdfAttached = false;
+  let pdfAttachment: MailAttachment | undefined;
 
   try {
-    await Promise.all([
-      sendMail({
-        to: inbox,
-        replyTo: data.email,
-        subject: lead.subject,
-        html: lead.html,
-        text: lead.text,
-      }),
-      sendMail({
-        to: data.email,
-        subject: guest.subject,
-        html: guest.html,
-        text: guest.text,
-      }),
-    ]);
+    const pdfBuffer = await generateBookingPdf(data, ref);
+    pdfAttachment = makePdfAttachment(pdfBuffer, ref);
+    pdfAttached = true;
+  } catch (err) {
+    console.error("[booking] PDF generation failed:", err);
+  }
+
+  const lead = internalLeadEmail(data, { pdfAttached });
+  const guest = guestConfirmationEmail(data, { pdfAttached });
+
+  try {
+    await sendMail({
+      to: inbox,
+      replyTo: data.email,
+      subject: lead.subject,
+      html: lead.html,
+      text: lead.text,
+      attachments: pdfAttachment ? [pdfAttachment] : undefined,
+    });
+
+    await sendMail({
+      to: data.email,
+      subject: guest.subject,
+      html: guest.html,
+      text: guest.text,
+      attachments: pdfAttachment ? [cloneAttachment(pdfAttachment)] : undefined,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("Booking send failed:", err);
+    console.error("[booking] SMTP send failed:", err);
     return NextResponse.json(
       { ok: false, error: "Something went wrong. Please try again or contact us on WhatsApp." },
       { status: 500 },

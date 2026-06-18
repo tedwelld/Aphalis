@@ -6,14 +6,50 @@ function requireEnv(name: string): string {
   return v;
 }
 
+export type MailAttachment = {
+  filename: string;
+  content: Buffer;
+  contentType?: string;
+  contentDisposition?: "attachment" | "inline";
+};
+
+export function formatFromAddress(): string {
+  const from = process.env.EMAIL_FROM ?? "bookings@indlulamithisafaris.com";
+  if (from.includes("<") && from.includes(">")) {
+    return from;
+  }
+  return `"Indlulamithi Safaris & Tours" <${from}>`;
+}
+
+function normalizeAttachments(attachments?: MailAttachment[]) {
+  if (!attachments?.length) return undefined;
+
+  return attachments.map((attachment) => {
+    const isPdf =
+      attachment.contentType === "application/pdf" ||
+      attachment.filename.toLowerCase().endsWith(".pdf");
+
+    return {
+      filename: attachment.filename,
+      content: attachment.content,
+      contentType: attachment.contentType ?? (isPdf ? "application/pdf" : undefined),
+      contentDisposition: attachment.contentDisposition ?? "attachment",
+    };
+  });
+}
+
 let _transporter: nodemailer.Transporter | null = null;
 
 function getTransporter() {
   if (!_transporter) {
+    const port = Number(process.env.SMTP_PORT ?? "587");
+    const secure = process.env.SMTP_SECURE === "true";
+
     _transporter = nodemailer.createTransport({
       host: requireEnv("SMTP_HOST"),
-      port: Number(process.env.SMTP_PORT ?? "587"),
-      secure: process.env.SMTP_SECURE === "true",
+      port,
+      secure,
+      requireTLS: port === 587 && !secure,
       auth: {
         user: requireEnv("SMTP_USER"),
         pass: requireEnv("SMTP_PASS"),
@@ -34,20 +70,18 @@ export type SendMailOptions = {
   subject: string;
   html: string;
   text: string;
-  attachments?: { filename: string; content: Buffer }[];
+  attachments?: MailAttachment[];
 };
 
 export async function sendMail({ to, replyTo, subject, html, text, attachments }: SendMailOptions) {
-  const from = process.env.EMAIL_FROM ?? "bookings@indlulamithisafaris.com";
-
   const info = await getTransporter().sendMail({
-    from: `"Indlulamithi Safaris & Tours" <${from}>`,
+    from: formatFromAddress(),
     to,
     replyTo,
     subject,
     html,
     text,
-    attachments,
+    attachments: normalizeAttachments(attachments),
   });
 
   console.log("[mail] Sent:", info.messageId);

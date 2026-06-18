@@ -41,7 +41,12 @@ function row(label: string, value?: string): string {
   </tr>`;
 }
 
-export function internalLeadEmail(data: BookingInput) {
+type EmailTemplateOptions = {
+  pdfAttached?: boolean;
+};
+
+export function internalLeadEmail(data: BookingInput, options?: EmailTemplateOptions) {
+  const pdfAttached = options?.pdfAttached ?? false;
   const subject = data.tour
     ? `New booking enquiry: ${data.tour}`
     : `New safari booking enquiry`;
@@ -73,7 +78,11 @@ export function internalLeadEmail(data: BookingInput) {
                    <p style="margin:0;white-space:pre-wrap;font-size:14px;">${esc(data.message)}</p>`
                 : ""
             }
-            <p style="margin-top:24px;font-size:13px;color:#6b6b66;">A PDF summary is attached. Reply directly to this email to respond to ${esc(data.name)}.</p>
+            <p style="margin-top:24px;font-size:13px;color:#6b6b66;">${
+              pdfAttached
+                ? `A PDF summary is attached. Reply directly to this email to respond to ${esc(data.name)}.`
+                : `Reply directly to this email to respond to ${esc(data.name)}.`
+            }</p>
           </td></tr>
           <tr><td style="padding:24px 32px 32px;border-top:1px solid #ece6d6;">
             <p style="margin:0;font-size:13px;color:#6b6b66;">${esc(siteConfig.name)} · ${esc(siteConfig.address)} · <a href="mailto:${siteConfig.email}" style="color:${GOLD_DARK};">${esc(siteConfig.email)}</a></p>
@@ -93,8 +102,7 @@ export function internalLeadEmail(data: BookingInput) {
     data.dates ? `Preferred dates: ${data.dates}` : null,
     data.guests ? `Guests: ${data.guests}` : null,
     data.message ? `\nMessage:\n${data.message}` : null,
-    ``,
-    `A PDF summary is attached.`,
+    pdfAttached ? `A PDF summary is attached.` : null,
   ]
     .filter(Boolean)
     .join("\n");
@@ -102,7 +110,8 @@ export function internalLeadEmail(data: BookingInput) {
   return { subject, html, text };
 }
 
-export function guestConfirmationEmail(data: BookingInput) {
+export function guestConfirmationEmail(data: BookingInput, options?: EmailTemplateOptions) {
+  const pdfAttached = options?.pdfAttached ?? false;
   const subject = `We've received your enquiry — ${siteConfig.name}`;
   const wa = buildWhatsappUrl({
     tourName: data.tour || undefined,
@@ -142,9 +151,13 @@ export function guestConfirmationEmail(data: BookingInput) {
             <p style="margin:0 0 8px;">
               <a href="${wa}" style="display:inline-block;background:#25D366;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:600;font-size:14px;">Chat on WhatsApp</a>
             </p>
-            <p style="margin:18px 0 8px;font-size:13px;color:#6b6b66;">
+            ${
+              pdfAttached
+                ? `<p style="margin:18px 0 8px;font-size:13px;color:#6b6b66;">
               A PDF summary of your enquiry is attached for your records.
-            </p>
+            </p>`
+                : ""
+            }
           </td></tr>
           <tr><td style="padding:24px 32px 32px;border-top:1px solid #ece6d6;">
             <p style="margin:16px 0 4px;font-size:13px;color:#6b6b66;">${esc(siteConfig.name)}</p>
@@ -165,8 +178,7 @@ export function guestConfirmationEmail(data: BookingInput) {
     data.guests ? `Guests: ${data.guests}` : null,
     ``,
     `Prefer to chat now? WhatsApp us: ${wa}`,
-    ``,
-    `A PDF summary is attached for your records.`,
+    pdfAttached ? `A PDF summary is attached for your records.` : null,
     ``,
     `${siteConfig.name} · ${siteConfig.address} · ${siteConfig.email}`,
   ]
