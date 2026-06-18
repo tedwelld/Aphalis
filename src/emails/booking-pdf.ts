@@ -1,94 +1,119 @@
-import fs from "node:fs";
-import path from "node:path";
-import PDFDocument from "pdfkit";
 import type { BookingInput } from "@/lib/bookingSchema";
 import { siteConfig } from "@/lib/siteConfig";
 
-function esc(s = ""): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
+export async function generateBookingPdf(data: BookingInput): Promise<Buffer> {
+  const pdfmake = await import("pdfmake");
+  const vfs = await import("pdfmake/build/vfs_fonts");
 
-export function generateBookingPdf(data: BookingInput): Buffer {
-  const doc = new PDFDocument({ margin: 50, size: "A4" });
-  const chunks: Buffer[] = [];
-  doc.on("data", (chunk) => chunks.push(chunk));
+  pdfmake.default.vfs = vfs.default;
 
-  const gold = "#c8a24b";
-  const goldDark = "#a8842f";
-  const gray = "#6b6b66";
-  const black = "#1a1a1a";
+  pdfmake.default.fonts = {
+    Roboto: {
+      normal: "Roboto-Regular.ttf",
+      bold: "Roboto-Medium.ttf",
+      italics: "Roboto-Italic.ttf",
+      bolditalics: "Roboto-MediumItalic.ttf",
+    },
+  };
 
-  function sectionTitle(y: number, text: string): number {
-    doc.fillColor(goldDark).fontSize(11).font("Helvetica-Bold").text(text, 50, y, { continued: false });
-    doc.moveTo(50, y + 16).lineTo(545, y + 16).strokeColor(gold).lineWidth(1).stroke();
-    return y + 24;
-  }
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const ref = now.getTime().toString(36).toUpperCase();
 
-  function field(label: string, value: string | undefined, y: number): number {
-    if (!value) return y;
-    doc.fillColor(gray).fontSize(10).font("Helvetica").text(label, 50, y);
-    doc.fillColor(black).fontSize(11).font("Helvetica").text(value, 180, y);
-    return y + 18;
-  }
+  const fieldRow = (label: string, value: string) => [
+    { text: label, fontSize: 9, color: "#6b6b66", width: 120, margin: [0, 3, 0, 3] },
+    { text: value, fontSize: 10, bold: true, color: "#1a1a1a", width: "*", margin: [0, 3, 0, 3] },
+  ];
 
-  // --- Logo ---
-  let logoY = 50;
-  try {
-    const logoPath = path.join(process.cwd(), "public", "indlulamitihilogo.png");
-    if (fs.existsSync(logoPath)) {
-      doc.image(logoPath, 50, logoY, { height: 32 });
-      logoY += 40;
-    }
-  } catch {
-    // fall through to text header
-  }
+  const separator = () => ({
+    canvas: [{ type: "line", x1: 0, y1: 0, x2: 495, y2: 0, lineWidth: 1, lineColor: "#c8a24b" }],
+    margin: [0, 0, 0, 6],
+  });
 
-  // --- Header ---
-  doc.fillColor(gold).fontSize(24).font("Helvetica-Bold").text("Indlulamithi", 50, logoY, { continued: true });
-  doc.fillColor(goldDark).fontSize(24).font("Helvetica").text(" Safaris & Tours");
+  const sectionTitle = (text: string) => ({
+    text,
+    fontSize: 11,
+    bold: true,
+    color: "#a8842f",
+    margin: [0, 8, 0, 2],
+  });
 
-  const contactY = logoY + 30;
-  doc.fillColor(gray).fontSize(10).font("Helvetica").text(siteConfig.address, 50, contactY);
-  doc.fillColor(gray).fontSize(10).font("Helvetica").text(siteConfig.email, 50, contactY + 14);
-  doc.fillColor(gray).fontSize(10).font("Helvetica").text(siteConfig.phoneDisplay, 50, contactY + 28);
+  const docDefinition: any = {
+    defaultStyle: { font: "Roboto" },
+    pageSize: "A4",
+    pageMargins: [50, 50, 50, 80],
+    content: [
+      {
+        text: [
+          { text: "Indlulamithi ", fontSize: 22, bold: true, color: "#c8a24b" },
+          { text: "Safaris & Tours", fontSize: 22, color: "#a8842f" },
+        ],
+        margin: [0, 0, 0, 4],
+      },
+      {
+        stack: [
+          { text: siteConfig.address, fontSize: 9, color: "#6b6b66" },
+          { text: siteConfig.email, fontSize: 9, color: "#6b6b66" },
+          { text: siteConfig.phoneDisplay, fontSize: 9, color: "#6b6b66" },
+        ],
+        margin: [0, 0, 0, 8],
+      },
+      separator(),
+      { text: "Booking Enquiry", fontSize: 18, bold: true, color: "#1a1a1a", margin: [0, 0, 0, 4] },
+      { text: `Received: ${dateStr}`, fontSize: 9, color: "#6b6b66", margin: [0, 0, 0, 2] },
+      { text: `Reference: ${ref}`, fontSize: 9, color: "#6b6b66", margin: [0, 0, 0, 10] },
 
-  // Gold rule
-  const ruleY = contactY + 44;
-  doc.moveTo(50, ruleY).lineTo(545, ruleY).strokeColor(gold).lineWidth(2).stroke();
+      sectionTitle("Customer Details"),
+      separator(),
+      {
+        table: { widths: [120, "*"], body: [fieldRow("Full Name", data.name), fieldRow("Email", data.email), ...(data.phone ? [fieldRow("Phone", data.phone)] : [])] },
+        layout: "noBorders",
+        margin: [0, 0, 0, 6],
+      },
 
-  // --- Title ---
-  const titleY = ruleY + 20;
-  doc.fillColor(black).fontSize(18).font("Helvetica-Bold").text("Booking Enquiry", 50, titleY);
-  doc.fillColor(gray).fontSize(10).font("Helvetica").text(`Received: ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}`, 50, titleY + 22);
-  doc.fillColor(gray).fontSize(10).font("Helvetica").text(`Reference: ${Date.now().toString(36).toUpperCase()}`, 50, titleY + 36);
+      sectionTitle("Booking Details"),
+      separator(),
+      {
+        table: {
+          widths: [120, "*"],
+          body: [
+            fieldRow("Tour / Interest", data.tour || "To be discussed"),
+            fieldRow("Preferred Dates", data.dates || "Flexible"),
+            fieldRow("Guests", data.guests || "—"),
+          ],
+        },
+        layout: "noBorders",
+        margin: [0, 0, 0, 6],
+      },
 
-  // --- Customer Details ---
-  let y = sectionTitle(titleY + 56, "Customer Details");
-  y = field("Full Name", data.name, y);
-  y = field("Email", data.email, y);
-  y = field("Phone", data.phone || undefined, y);
+      ...(data.message
+        ? [
+            sectionTitle("Message"),
+            separator(),
+            { text: data.message, fontSize: 10, color: "#1a1a1a", margin: [0, 0, 0, 8] },
+          ]
+        : []),
+    ],
+    footer: (currentPage: number, pageCount: number) => ({
+      stack: [
+        {
+          canvas: [{ type: "line", x1: 50, y1: 0, x2: 545, y2: 0, lineWidth: 1, lineColor: "#c8a24b" }],
+          margin: [0, 0, 0, 4],
+        },
+        { text: siteConfig.name, fontSize: 8, color: "#6b6b66", alignment: "center" },
+        { text: `${siteConfig.address} · ${siteConfig.email} · ${siteConfig.phoneDisplay}`, fontSize: 8, color: "#6b6b66", alignment: "center" },
+        { text: `Page ${currentPage} of ${pageCount}`, fontSize: 8, color: "#6b6b66", alignment: "center", margin: [0, 4, 0, 0] },
+      ],
+      margin: [50, 0, 50, 20],
+    }),
+  };
 
-  // --- Booking Details ---
-  y = sectionTitle(Math.max(y + 8, titleY + 120), "Booking Details");
-  y = field("Tour / Interest", data.tour || "To be discussed", y);
-  y = field("Preferred Dates", data.dates || "Flexible", y);
-  y = field("Guests", data.guests || "—", y);
+  const pdfDoc = pdfmake.default.createPdf(docDefinition);
 
-  // --- Message ---
-  if (data.message) {
-    y = sectionTitle(Math.max(y + 8, titleY + 180), "Message");
-    doc.fillColor(black).fontSize(11).font("Helvetica").text(data.message, 50, y, { width: 495, align: "left" });
-    const textHeight = doc.heightOfString(data.message, { width: 495 });
-    y += textHeight + 12;
-  }
-
-  // --- Footer ---
-  const footerY = Math.max(y + 40, 700);
-  doc.moveTo(50, footerY).lineTo(545, footerY).strokeColor(gold).lineWidth(1).stroke();
-  doc.fillColor(gray).fontSize(8).font("Helvetica").text(siteConfig.name, 50, footerY + 10, { align: "center", width: 495 });
-  doc.fillColor(gray).fontSize(8).font("Helvetica").text(`${siteConfig.address} · ${siteConfig.email} · ${siteConfig.phoneDisplay}`, 50, footerY + 24, { align: "center", width: 495 });
-
-  doc.end();
-
-  return Buffer.concat(chunks);
+  return new Promise<Buffer>((resolve, reject) => {
+    pdfDoc.getBuffer((buffer: Buffer) => {
+      if (buffer) resolve(buffer);
+      else reject(new Error("PDF generation returned empty buffer"));
+    });
+  });
 }

@@ -46,7 +46,7 @@ export async function POST(request: Request) {
   const lead = internalLeadEmail(data);
   const guest = guestConfirmationEmail(data);
 
-  const pdfBuffer = generateBookingPdf(data);
+  const pdfBuffer = await generateBookingPdf(data);
 
   const pdfAttachment = {
     filename: `booking-enquiry-${Date.now().toString(36)}.pdf`,
