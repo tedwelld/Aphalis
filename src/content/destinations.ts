@@ -27,7 +27,7 @@ export const destinations: Destination[] = [
     description:
       "From the thundering spray of Victoria Falls to the elephant-rich plains of Hwange National Park, Zimbabwe is the beating heart of our safaris. Walk with expert guides, cruise the Zambezi at sunset, and witness one of Africa's last great wildernesses.",
     highlights: ["Victoria Falls", "Hwange National Park", "Zambezi River", "Matobo Hills"],
-    image: demoPhoto("victoria-falls,zimbabwe", 101, 1200, 900),
+    image: "/vicfalls.jpeg",
   },
   {
     slug: "botswana",

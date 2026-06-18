@@ -2,6 +2,8 @@
 
 import { demoPhoto } from "@/lib/img";
 
+
+
 export type Guide = {
   name: string;
   role: string;
@@ -11,22 +13,16 @@ export type Guide = {
 
 export const guides: Guide[] = [
   {
-    name: "Lead Guide", // PLACEHOLDER — replace with real ATSZ guide
+    name: "Lead Guide",
     role: "Senior Safari Guide",
     bio: "Born and raised in the region, our senior guide brings over a decade of tracking experience and a deep passion for conservation.",
-    image: demoPhoto("portrait,man,african", 401, 600, 600),
+    image: "/leadguide.jpeg",
   },
   {
-    name: "Wildlife Guide",
-    role: "Walking Safari Specialist",
-    bio: "A licensed walking guide and keen birder who turns every bush walk into a story about the wilderness around you.",
-    image: demoPhoto("portrait,safari,guide", 402, 600, 600),
-  },
-  {
-    name: "Cultural Guide",
-    role: "Cultural & Heritage Guide",
-    bio: "Connects guests with local communities and the living traditions that make this corner of Africa so special.",
-    image: demoPhoto("portrait,woman,african", 403, 600, 600),
+    name: "Wildlife & Cultural Guide",
+    role: "Wildlife & Cultural Guide",
+    bio: "A licensed walking guide and keen birder who turns every bush walk into a story about the wilderness around you, with deep connections to local communities.",
+    image: "/secondguide.jpeg",
   },
 ];
 

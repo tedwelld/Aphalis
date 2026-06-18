@@ -66,7 +66,7 @@ export const blogPosts: BlogPost[] = [
       "The Falls are just the beginning. Discover the adventures, cruises and culture that make this one of Africa's great destinations.",
     date: "2026-04-28",
     author: "Indlulamithi Safaris & Tours",
-    image: demoPhoto("victoria-falls,zambezi", 602, 1200, 700),
+    image: "/vicfalls.jpeg",
     body:
       "Most travellers come for the thundering curtain of water — and it never disappoints. But Victoria Falls is also a vibrant hub of adventure, culture and natural beauty.",
     sections: [

@@ -117,10 +117,10 @@ export default function HomePage() {
             description="Born and raised in the wild places we explore — your guides are the heart of every safari."
           />
         </Reveal>
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="flex flex-wrap justify-center gap-8">
           {guides.map((g, i) => (
             <Reveal key={g.name} delay={i * 90}>
-              <div className="text-center">
+              <div className="text-center max-w-56">
                 <Photo src={g.image} alt={g.name} className="mx-auto aspect-square w-40 rounded-full" />
                 <h3 className="mt-4 text-lg text-foreground">{g.name}</h3>
                 <p className="text-sm font-medium text-gold-dark">{g.role}</p>
