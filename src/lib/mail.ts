@@ -18,6 +18,11 @@ function getTransporter() {
         user: requireEnv("SMTP_USER"),
         pass: requireEnv("SMTP_PASS"),
       },
+      pool: true,
+      maxConnections: 1,
+      maxMessages: Infinity,
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
     });
   }
   return _transporter;
