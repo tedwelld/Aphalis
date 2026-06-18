@@ -63,7 +63,14 @@ export function BookingForm({ tourName }: { tourName?: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-      const json = await res.json();
+      let json: { ok: boolean; error?: string };
+      try {
+        json = await res.json();
+      } catch {
+        setStatus("error");
+        setServerError(`Server returned ${res.status}. Check console for details.`);
+        return;
+      }
       if (!res.ok || !json.ok) {
         setStatus("error");
         setServerError(json.error ?? "Something went wrong. Please try again.");
