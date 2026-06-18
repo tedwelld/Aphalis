@@ -13,14 +13,14 @@ export const siteConfig = {
   tagline: "Explore the wild — ethical African safaris, crafted by expert local guides.",
   description:
     "Indlulamithi Safaris & Tours offers unforgettable, ethical safari experiences across Zimbabwe, Botswana, Namibia and Zambia — game drives, boat cruises, walking safaris and more. Book online, on WhatsApp, or by email.",
-  url: "https://indlulamithisafaris.com",
+  url: "https://www.indlulamithisafaris.com",
   locale: "en",
 
   // Contact (PLACEHOLDERS — replace with the company's real details)
   email: "bookings@indlulamithisafaris.com",
-  phoneDisplay: "+263 78 927 6807",
+  phoneDisplay: "+263 78 403 3935",
   whatsappNumber:
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "263789276807", // E.164, digits only (+263 78 927 6807)
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "263784033935", // E.164, digits only (+263 78 403 3935)
   address: "Victoria Falls, Zimbabwe",
 
   // Bokun
