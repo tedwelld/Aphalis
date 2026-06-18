@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { bookingSchema } from "@/lib/bookingSchema";
 import { internalLeadEmail, guestConfirmationEmail } from "@/emails/templates";
-import { generateBookingPdf } from "@/emails/booking-pdf";
 import { sendMail } from "@/lib/mail";
 
 export async function POST(request: Request) {
@@ -46,13 +45,6 @@ export async function POST(request: Request) {
   const lead = internalLeadEmail(data);
   const guest = guestConfirmationEmail(data);
 
-  const pdfBuffer = await generateBookingPdf(data);
-
-  const pdfAttachment = {
-    filename: `booking-enquiry-${Date.now().toString(36)}.pdf`,
-    content: pdfBuffer,
-  };
-
   try {
     await Promise.all([
       sendMail({
@@ -61,14 +53,12 @@ export async function POST(request: Request) {
         subject: lead.subject,
         html: lead.html,
         text: lead.text,
-        attachments: [pdfAttachment],
       }),
       sendMail({
         to: data.email,
         subject: guest.subject,
         html: guest.html,
         text: guest.text,
-        attachments: [pdfAttachment],
       }),
     ]);
 
