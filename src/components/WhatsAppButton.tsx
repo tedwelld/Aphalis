@@ -31,7 +31,7 @@ export function WhatsAppButton({
   );
 }
 
-/** Floating WhatsApp action button, rendered site-wide in the layout. */
+/** Floating WhatsApp action button, rendered site-wide in the layout. Ready for deployment trigger. */
 export function WhatsAppFab() {
   return (
     <a
@@ -43,7 +43,7 @@ export function WhatsAppFab() {
         "fixed bottom-28 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full",
         "lg:bottom-5",
         "bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105",
-        "dark:bg-[#25D366] dark:shadow-none dark:ring-0 dark:backdrop-blur-0",
+        "dark:bg-[#25D366] dark:text-white dark:shadow-none dark:[box-shadow:none]",
       )}
     >
       <Pi name="pi-whatsapp" className="text-3xl" />
